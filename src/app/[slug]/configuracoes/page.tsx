@@ -99,14 +99,14 @@ export default async function ConfiguracoesPage({ params }: { params: Promise<{ 
     }))
 
     return (
-        <div className="flex min-h-screen bg-[#0a0e27]">
-            <Sidebar tenantSlug={slug} tenantName={tenant.name} />
+        <div className="flex min-h-screen bg-background">
+            <Sidebar tenantSlug={slug} tenantName={tenant.name} logoUrl={tenant.logoUrl} />
 
             <main className="flex-1 ml-64 p-8">
                 {/* Header */}
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-white mb-2">Configurações</h1>
-                    <p className="text-zinc-400">Gerencie sua imobiliária, corretores, metas e imóveis</p>
+                    <h1 className="text-3xl font-bold text-foreground mb-2">Configurações</h1>
+                    <p className="text-muted-foreground">Gerencie sua imobiliária, corretores, metas e imóveis</p>
                 </div>
 
                 {/* Tabs Content */}

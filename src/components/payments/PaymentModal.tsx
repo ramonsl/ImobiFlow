@@ -104,7 +104,7 @@ export function PaymentModal({ isOpen, onClose, onSave, tenantId, month, year }:
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="bg-[#1a1f3a] border-zinc-800 text-white max-w-md">
+            <DialogContent className="bg-card border-border text-foreground max-w-md">
                 <DialogHeader>
                     <DialogTitle className="text-xl font-semibold">Novo Reembolso</DialogTitle>
                 </DialogHeader>
@@ -112,12 +112,12 @@ export function PaymentModal({ isOpen, onClose, onSave, tenantId, month, year }:
                 <div className="space-y-4 py-4">
                     {/* Broker Select */}
                     <div>
-                        <label className="block text-sm text-zinc-400 mb-1">Colaborador *</label>
+                        <label className="block text-sm text-muted-foreground mb-1">Colaborador *</label>
                         <div className="relative">
                             <select
                                 value={brokerId || ''}
                                 onChange={(e) => setBrokerId(parseInt(e.target.value) || null)}
-                                className="w-full appearance-none bg-[#0a0e27] border border-zinc-700 text-white px-4 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none"
+                                className="w-full appearance-none bg-background border border-input text-foreground px-4 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none"
                                 disabled={loading}
                             >
                                 <option value="">Selecione...</option>
@@ -125,31 +125,31 @@ export function PaymentModal({ isOpen, onClose, onSave, tenantId, month, year }:
                                     <option key={broker.id} value={broker.id}>{broker.name}</option>
                                 ))}
                             </select>
-                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                         </div>
                     </div>
 
                     {/* Description */}
                     <div>
-                        <label className="block text-sm text-zinc-400 mb-1">Descrição *</label>
+                        <label className="block text-sm text-muted-foreground mb-1">Descrição *</label>
                         <Input
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Ex: Combustível, Almoço com cliente..."
-                            className="bg-[#0a0e27] border-zinc-700 text-white"
+                            className="bg-background border-input text-foreground"
                         />
                     </div>
 
                     {/* Amount */}
                     <div>
-                        <label className="block text-sm text-zinc-400 mb-1">Valor *</label>
+                        <label className="block text-sm text-muted-foreground mb-1">Valor *</label>
                         <div className="relative">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">R$</span>
                             <Input
                                 value={formatInputValue(amount)}
                                 onChange={(e) => setAmount(handleCurrencyInput(e.target.value))}
                                 placeholder="0"
-                                className="bg-[#0a0e27] border-zinc-700 text-white pl-10 text-right"
+                                className="bg-background border-input text-foreground pl-10 text-right"
                             />
                         </div>
                         {amount > 0 && (
@@ -159,12 +159,12 @@ export function PaymentModal({ isOpen, onClose, onSave, tenantId, month, year }:
 
                     {/* Notes */}
                     <div>
-                        <label className="block text-sm text-zinc-400 mb-1">Observações</label>
+                        <label className="block text-sm text-muted-foreground mb-1">Observações</label>
                         <textarea
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                             placeholder="Informações adicionais..."
-                            className="w-full bg-[#0a0e27] border border-zinc-700 text-white px-3 py-2 rounded-lg focus:border-emerald-500 focus:outline-none resize-none h-20"
+                            className="w-full bg-background border border-input text-foreground px-3 py-2 rounded-lg focus:border-primary focus:outline-none resize-none h-20"
                         />
                     </div>
                 </div>
@@ -176,7 +176,7 @@ export function PaymentModal({ isOpen, onClose, onSave, tenantId, month, year }:
                     <Button
                         onClick={handleSubmit}
                         disabled={saving}
-                        className="bg-emerald-500 hover:bg-emerald-600"
+                        className="bg-primary hover:bg-primary/90"
                     >
                         {saving ? (
                             <>

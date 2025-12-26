@@ -4,7 +4,7 @@ import { deals, dealExpenses, dealParticipants, brokers, sales, brokerGoals } fr
 import { eq, and, desc } from "drizzle-orm"
 import { sendSaleNotification, isConnected } from "@/lib/whatsapp"
 
-// GET - List all deals for a tenant
+// GET - List all deals for a tenant with participants
 export async function GET(request: NextRequest) {
     try {
         const tenantId = parseInt(request.nextUrl.searchParams.get("tenantId") || "0")
@@ -25,7 +25,30 @@ export async function GET(request: NextRequest) {
             ? dealsList.filter(d => d.saleDate && new Date(d.saleDate).getFullYear() === year)
             : dealsList
 
-        return NextResponse.json(filtered)
+        // Fetch participants for each deal
+        const dealsWithParticipants = await Promise.all(
+            filtered.map(async (deal) => {
+                const participants = await db
+                    .select({
+                        id: dealParticipants.id,
+                        participantName: dealParticipants.participantName,
+                        brokerName: brokers.name,
+                        role: dealParticipants.role,
+                        isResponsible: dealParticipants.isResponsible,
+                        commissionValue: dealParticipants.commissionValue
+                    })
+                    .from(dealParticipants)
+                    .leftJoin(brokers, eq(dealParticipants.brokerId, brokers.id))
+                    .where(eq(dealParticipants.dealId, deal.id))
+
+                return {
+                    ...deal,
+                    participants
+                }
+            })
+        )
+
+        return NextResponse.json(dealsWithParticipants)
     } catch (error) {
         console.error("Erro ao listar vendas:", error)
         return NextResponse.json({ error: "Erro interno do servidor" }, { status: 500 })

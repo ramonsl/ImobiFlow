@@ -1,11 +1,11 @@
-# ImobiGestor Context & Guidelines
+# ImobiFlow Context & Guidelines
 
-Este arquivo serve como **fonte de verdade** para agentes de IA entenderem o contexto, arquitetura e padrões do projeto ImobiGestor.
+Este arquivo serve como **fonte de verdade** para agentes de IA entenderem o contexto, arquitetura e padrões do projeto ImobiFlow.
 
 ---
 
 ## 🏢 Visão Geral do Produto
-**Nome:** ImobiGestor SaaS
+**Nome:** ImobiFlow SaaS
 **Objetivo:** Plataforma SaaS B2B para imobiliárias gerenciarem vendas, comissões, financeiro e promoverem competitividade via rankings (Gamification).
 
 ### Principais Entidades
@@ -37,10 +37,12 @@ Este arquivo serve como **fonte de verdade** para agentes de IA entenderem o con
 - `/src/actions`: Server Actions (substituindo API Routes onde possível).
 - `/src/components/ui`: Componentes Shadcn.
 
-### 2. Princípios (Clean Code)
+### 2. Princípios (Clean Code & UI)
 - **Server Actions First:** Preferir Server Actions para mutações de dados.
 - **Type Safety:** TypeScript estrito. Zod para validação de esquemas.
 - **Multi-tenancy:** Toda query de dados deve filtrar pelo `tenantId` (exceto Super Admin).
+- **Shadcn/UI First:** Todos os novos componentes de UI devem ser baseados ou reutilizados de [shadcn/ui](https://ui.shadcn.com/).
+- **CSS Standardized:** O CSS deve ser padronizado via variáveis do Tailwind/CSS (ex: `text-primary`, `bg-background`, `border-border`). **Proibido o uso de cores ou valores "hardcoded"** para facilitar a troca de temas (Dark/Light/Branding).
 
 ### 3. Banco de Dados (Drizzle)
 - Use `drizzle-kit` para gerar e rodar migrations.

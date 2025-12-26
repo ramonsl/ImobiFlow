@@ -1,35 +1,61 @@
-import { auth } from "@/auth"
 import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
+import { auth } from "@/auth"
 
-export default auth((req) => {
-    const { nextUrl } = req
-    const isLoggedIn = !!req.auth
-    const isApiAuthRoute = nextUrl.pathname.startsWith("/api/auth")
-    const isPublicRoute = nextUrl.pathname === "/" || nextUrl.pathname === "/login" || nextUrl.pathname === "/register"
+export async function middleware(request: NextRequest) {
+    const { pathname } = request.nextUrl
 
-    // Extract tenant slug from path: /slug/dashboard -> slug
-    // Path parts: ["", "slug", "dashboard"]
-    const pathParts = nextUrl.pathname.split("/")
-    const potentialTenantSlug = pathParts[1]
-    const isTenantRoute = potentialTenantSlug && !["api", "_next", "static", "images", "favicon.ico"].includes(potentialTenantSlug)
-
-    // 1. Allow API Auth routes
-    if (isApiAuthRoute) {
+    // Skip middleware for public routes
+    if (pathname === '/' || pathname === '/login' || pathname.startsWith('/api/auth')) {
         return NextResponse.next()
     }
 
-    // 2. If it's a tenant route (e.g. /my-agency/dashboard) and not logged in
-    if (isTenantRoute && !isLoggedIn && !isPublicRoute) {
-        // Redirect to login, passing the callback url
-        // Ideally we might want a specific tenant login page: /my-agency/login
-        // For now, global login
-        return Response.redirect(new URL(`/login?callbackUrl=${nextUrl.pathname}`, nextUrl))
+    // Get session
+    const session = await auth()
+
+    // Extract slug from URL (e.g., /imobiliaria-abc/dashboard -> imobiliaria-abc)
+    const slugMatch = pathname.match(/^\/([^\/]+)\//)
+    const requestedSlug = slugMatch?.[1]
+
+    // Protect admin routes
+    if (pathname.startsWith('/admin')) {
+        if (!session?.user || session.user.role !== 'admin') {
+            return NextResponse.redirect(new URL('/login', request.url))
+        }
+        return NextResponse.next()
+    }
+
+    // Protect tenant routes
+    if (requestedSlug && requestedSlug !== 'api') {
+        // User must be logged in
+        if (!session?.user) {
+            return NextResponse.redirect(new URL('/login', request.url))
+        }
+
+        // Admin can access all tenants
+        if (session.user.role === 'admin') {
+            return NextResponse.next()
+        }
+
+        // Regular users can only access their own tenant
+        if (session.user.tenantSlug !== requestedSlug) {
+            return NextResponse.redirect(new URL('/login', request.url))
+        }
     }
 
     return NextResponse.next()
-})
+}
 
-// Matcher to ignore static files and internals
+// Configure which routes to run middleware on
 export const config = {
-    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+    matcher: [
+        /*
+         * Match all request paths except:
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         * - public folder
+         */
+        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    ],
 }

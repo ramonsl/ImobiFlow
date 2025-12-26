@@ -157,10 +157,10 @@ export function WhatsAppConfig({ tenantId }: WhatsAppConfigProps) {
         switch (status) {
             case 'connected':
                 return {
-                    icon: <CheckCircle className="h-6 w-6 text-emerald-500" />,
+                    icon: <CheckCircle className="h-6 w-6 text-primary" />,
                     text: 'Conectado',
-                    color: 'text-emerald-500',
-                    bgColor: 'bg-emerald-500/20'
+                    color: 'text-primary',
+                    bgColor: 'bg-primary/20'
                 }
             case 'connecting':
                 return {
@@ -178,9 +178,9 @@ export function WhatsAppConfig({ tenantId }: WhatsAppConfigProps) {
                 }
             default:
                 return {
-                    icon: <XCircle className="h-6 w-6 text-zinc-400" />,
+                    icon: <XCircle className="h-6 w-6 text-muted-foreground" />,
                     text: 'Desconectado',
-                    color: 'text-zinc-400',
+                    color: 'text-muted-foreground',
                     bgColor: 'bg-zinc-500/20'
                 }
         }
@@ -190,10 +190,10 @@ export function WhatsAppConfig({ tenantId }: WhatsAppConfigProps) {
 
     const getLogColor = (type: LogEntry['type']) => {
         switch (type) {
-            case 'success': return 'text-emerald-400'
+            case 'success': return 'text-primary'
             case 'error': return 'text-red-400'
             case 'warning': return 'text-amber-400'
-            default: return 'text-zinc-400'
+            default: return 'text-muted-foreground'
         }
     }
 
@@ -204,25 +204,25 @@ export function WhatsAppConfig({ tenantId }: WhatsAppConfigProps) {
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                            <MessageSquare className="h-5 w-5 text-emerald-500" />
+                        <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                            <MessageSquare className="h-5 w-5 text-primary" />
                             Integração WhatsApp
                         </h3>
-                        <p className="text-zinc-400 text-sm">
+                        <p className="text-muted-foreground text-sm">
                             Conecte o WhatsApp para enviar notificações automáticas
                         </p>
                     </div>
                 </div>
 
                 {/* Status Card */}
-                <div className={`rounded-lg p-6 ${statusInfo.bgColor} border border-zinc-700 transition-all duration-300`}>
+                <div className={`rounded-lg p-6 ${statusInfo.bgColor} border border-input transition-all duration-300`}>
                     <div className="flex items-center gap-4">
                         <div className="p-3 bg-zinc-800 rounded-lg">
                             {statusInfo.icon}
                         </div>
                         <div>
                             <p className={`font-semibold ${statusInfo.color}`}>{statusInfo.text}</p>
-                            <p className="text-zinc-400 text-sm">
+                            <p className="text-muted-foreground text-sm">
                                 {status === 'connected'
                                     ? 'Pronto para enviar notificações'
                                     : status === 'qr'
@@ -247,7 +247,7 @@ export function WhatsAppConfig({ tenantId }: WhatsAppConfigProps) {
                             />
                         ) : (
                             <div className="w-64 h-64 flex items-center justify-center bg-zinc-100 rounded">
-                                <Loader2 className="h-8 w-8 text-zinc-400 animate-spin" />
+                                <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
                             </div>
                         )}
                         <p className="mt-4 text-zinc-600 text-center text-sm">
@@ -262,8 +262,8 @@ export function WhatsAppConfig({ tenantId }: WhatsAppConfigProps) {
 
                 {/* Info when connected */}
                 {status === 'connected' && (
-                    <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
-                        <p className="text-emerald-400 text-sm">
+                    <div className="bg-primary/10 border border-primary/30 rounded-lg p-4">
+                        <p className="text-primary text-sm">
                             ✅ Tudo pronto! Quando uma venda for registrada, os colaboradores envolvidos receberão
                             automaticamente uma notificação.
                         </p>
@@ -276,7 +276,7 @@ export function WhatsAppConfig({ tenantId }: WhatsAppConfigProps) {
                         <Button
                             onClick={handleConnect}
                             disabled={loading}
-                            className="bg-emerald-500 hover:bg-emerald-600 text-white w-full py-6 text-lg"
+                            className="bg-primary hover:bg-primary/90 text-primary-foreground w-full py-6 text-lg shadow-xl shadow-primary/20"
                         >
                             {loading ? (
                                 <>
@@ -319,8 +319,8 @@ export function WhatsAppConfig({ tenantId }: WhatsAppConfigProps) {
             <div className="space-y-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <Terminal className="h-5 w-5 text-zinc-400" />
-                        <h3 className="text-lg font-semibold text-white">Logs do Sistema</h3>
+                        <Terminal className="h-5 w-5 text-muted-foreground" />
+                        <h3 className="text-lg font-semibold text-foreground">Logs do Sistema</h3>
                     </div>
                     <Button
                         variant="ghost"
@@ -332,7 +332,7 @@ export function WhatsAppConfig({ tenantId }: WhatsAppConfigProps) {
                     </Button>
                 </div>
 
-                <div className="bg-[#0a0e27] border border-zinc-800 rounded-lg h-[400px] overflow-y-auto font-mono text-xs lg:text-sm p-4">
+                <div className="bg-background border border-border rounded-lg h-[400px] overflow-y-auto font-mono text-xs lg:text-sm p-4">
                     <div className="space-y-2">
                         {logs.length === 0 ? (
                             <p className="text-zinc-600 italic">Dispositivo pronto para conexão...</p>

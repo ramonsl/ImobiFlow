@@ -14,8 +14,8 @@ interface BrokerPerformanceChartProps {
 
 export function BrokerPerformanceChart({ data }: BrokerPerformanceChartProps) {
     return (
-        <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-white mb-6">Meta x Executado por Corretor</h3>
+        <div className="bg-card border border-border rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-6">Meta x Executado por Corretor</h3>
             <ResponsiveContainer width="100%" height={400}>
                 <BarChart
                     data={data}
@@ -32,7 +32,7 @@ export function BrokerPerformanceChart({ data }: BrokerPerformanceChartProps) {
                             borderRadius: '8px',
                             color: '#fff'
                         }}
-                        formatter={(value: number) => `R$ ${value.toLocaleString('pt-BR')}`}
+                        formatter={(value: number | undefined) => `R$ ${value?.toLocaleString('pt-BR') || '0'}`}
                     />
                     <Bar dataKey="executado" fill="#10b981" radius={[0, 4, 4, 0]} />
                     <Bar dataKey="meta" fill="#3b4a6b" radius={[0, 4, 4, 0]} />

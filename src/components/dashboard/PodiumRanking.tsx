@@ -90,9 +90,9 @@ export function PodiumRanking({ title, rankings }: PodiumRankingProps) {
     }
 
     return (
-        <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-8">
-            <h2 className="text-xl font-bold text-white mb-8 flex items-center gap-2">
-                <span className="text-emerald-500">🏆</span>
+        <div className="bg-card border border-border rounded-lg p-8">
+            <h2 className="text-xl font-bold text-foreground mb-8 flex items-center gap-2">
+                <span className="text-primary">🏆</span>
                 {title}
             </h2>
 
@@ -138,14 +138,14 @@ export function PodiumRanking({ title, rankings }: PodiumRankingProps) {
                                             damping: 12
                                         }}
                                     >
-                                        <Crown className="absolute -top-8 left-1/2 -translate-x-1/2 h-8 w-8 text-emerald-500" />
+                                        <Crown className="absolute -top-8 left-1/2 -translate-x-1/2 h-8 w-8 text-primary" />
                                     </motion.div>
                                 )}
                                 <div className={`${getAvatarSize(person.position)} rounded-full bg-gradient-to-br from-zinc-700 to-zinc-800 border-4 ${getMedalColor(person.position).border} flex items-center justify-center overflow-hidden`}>
                                     {person.avatar ? (
                                         <img src={person.avatar} alt={person.name} className="w-full h-full object-cover" />
                                     ) : (
-                                        <span className="text-2xl font-bold text-zinc-400">
+                                        <span className="text-2xl font-bold text-muted-foreground">
                                             {getInitials(person.name)}
                                         </span>
                                     )}
@@ -167,7 +167,7 @@ export function PodiumRanking({ title, rankings }: PodiumRankingProps) {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ duration: 0.5, delay: delay + 0.8 }}
-                                    className={`font-bold mb-1 text-sm ${person.position === 1 ? 'text-zinc-900' : 'text-white'}`}
+                                    className={`font-bold mb-1 text-sm ${person.position === 1 ? 'text-zinc-900' : 'text-foreground'}`}
                                 >
                                     {person.name}
                                 </motion.p>

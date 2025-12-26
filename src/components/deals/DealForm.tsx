@@ -307,18 +307,18 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
 
             <div className="space-y-6">
                 {/* Seção 1: Dados do Imóvel */}
-                <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
+                <div className="bg-card border border-border rounded-lg p-6">
                     <div className="flex items-center gap-3 mb-4">
-                        <Building2 className="h-5 w-5 text-emerald-500" />
+                        <Building2 className="h-5 w-5 text-primary" />
                         <div>
-                            <h2 className="text-lg font-semibold text-white">Dados do Imóvel</h2>
-                            <p className="text-zinc-400 text-sm">Informações básicas do imóvel vendido</p>
+                            <h2 className="text-lg font-semibold text-foreground">Dados do Imóvel</h2>
+                            <p className="text-muted-foreground text-sm">Informações básicas do imóvel vendido</p>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-1">Nome / Identificação</label>
+                            <label className="block text-sm text-muted-foreground mb-1">Nome / Identificação</label>
                             <PropertyAutocomplete
                                 tenantId={tenantId}
                                 onSelect={handlePropertySelect}
@@ -326,49 +326,49 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-1">Data da Venda</label>
+                            <label className="block text-sm text-muted-foreground mb-1">Data da Venda</label>
                             <div className="relative">
-                                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                 <Input
                                     type="date"
                                     value={saleDate}
                                     onChange={(e) => setSaleDate(e.target.value)}
-                                    className="bg-[#0a0e27] border-zinc-700 text-white pl-10"
+                                    className="bg-background border-input text-foreground pl-10"
                                 />
                             </div>
                         </div>
                     </div>
 
                     <div className="mt-4">
-                        <label className="block text-sm text-zinc-400 mb-1">Endereço</label>
+                        <label className="block text-sm text-muted-foreground mb-1">Endereço</label>
                         <Input
                             value={propertyAddress}
                             onChange={(e) => setPropertyAddress(e.target.value)}
-                            className="bg-[#0a0e27] border-zinc-700 text-white"
+                            className="bg-background border-input text-foreground"
                             placeholder="Ex: Rua das Flores, 123 - Centro"
                         />
                     </div>
                 </div>
 
                 {/* Seção 2: Valores e Comissão */}
-                <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
+                <div className="bg-card border border-border rounded-lg p-6">
                     <div className="flex items-center gap-3 mb-4">
-                        <DollarSign className="h-5 w-5 text-emerald-500" />
+                        <DollarSign className="h-5 w-5 text-primary" />
                         <div>
-                            <h2 className="text-lg font-semibold text-white">Valores e Comissão</h2>
-                            <p className="text-zinc-400 text-sm">Defina o valor da venda e a comissão</p>
+                            <h2 className="text-lg font-semibold text-foreground">Valores e Comissão</h2>
+                            <p className="text-muted-foreground text-sm">Defina o valor da venda e a comissão</p>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-1">Valor da Venda</label>
+                            <label className="block text-sm text-muted-foreground mb-1">Valor da Venda</label>
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">R$</span>
                                 <Input
                                     value={formatInputValue(saleValue)}
                                     onChange={(e) => setSaleValue(handleCurrencyInput(e.target.value))}
-                                    className="bg-[#0a0e27] border-zinc-700 text-white pl-10 text-right"
+                                    className="bg-background border-input text-foreground pl-10 text-right"
                                     placeholder="0"
                                 />
                             </div>
@@ -377,21 +377,21 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                             )}
                         </div>
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-1">Tipo de Comissão</label>
+                            <label className="block text-sm text-muted-foreground mb-1">Tipo de Comissão</label>
                             <div className="relative">
                                 <select
                                     value={commissionType}
                                     onChange={(e) => setCommissionType(e.target.value as 'percent' | 'fixed')}
-                                    className="w-full appearance-none bg-[#0a0e27] border border-zinc-700 text-white px-3 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none"
+                                    className="w-full appearance-none bg-background border border-input text-foreground px-3 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none"
                                 >
                                     <option value="percent">Percentual (%)</option>
                                     <option value="fixed">Valor Fixo (R$)</option>
                                 </select>
-                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                             </div>
                         </div>
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-1">
+                            <label className="block text-sm text-muted-foreground mb-1">
                                 {commissionType === 'percent' ? 'Percentual (%)' : 'Valor Fixo (R$)'}
                             </label>
                             {commissionType === 'percent' ? (
@@ -401,7 +401,7 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                                         step="0.01"
                                         value={commissionPercent}
                                         onChange={(e) => setCommissionPercent(parseFloat(e.target.value) || 0)}
-                                        className="bg-[#0a0e27] border-zinc-700 text-white pr-8"
+                                        className="bg-background border-input text-foreground pr-8"
                                     />
                                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500">%</span>
                                 </div>
@@ -412,7 +412,7 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                                         <Input
                                             value={formatInputValue(commissionFixed)}
                                             onChange={(e) => setCommissionFixed(handleCurrencyInput(e.target.value))}
-                                            className="bg-[#0a0e27] border-zinc-700 text-white pl-10 text-right"
+                                            className="bg-background border-input text-foreground pl-10 text-right"
                                             placeholder="0"
                                         />
                                     </div>
@@ -424,9 +424,9 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                         </div>
                     </div>
 
-                    <div className="mt-4 p-4 bg-[#0a0e27] rounded-lg flex justify-between items-center">
-                        <span className="text-zinc-400">Comissão Total:</span>
-                        <span className="text-2xl font-bold text-emerald-500">{formatCurrencyDisplay(grossCommission)}</span>
+                    <div className="mt-4 p-4 bg-background rounded-lg flex justify-between items-center">
+                        <span className="text-muted-foreground">Comissão Total:</span>
+                        <span className="text-2xl font-bold text-primary">{formatCurrencyDisplay(grossCommission)}</span>
                     </div>
 
                     {commissionType === 'percent' && saleValue > 0 && (
@@ -442,19 +442,19 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                 </div>
 
                 {/* Seção 3: Despesas */}
-                <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
+                <div className="bg-card border border-border rounded-lg p-6">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
-                            <Receipt className="h-5 w-5 text-emerald-500" />
+                            <Receipt className="h-5 w-5 text-primary" />
                             <div>
-                                <h2 className="text-lg font-semibold text-white">Despesas de Negociação</h2>
-                                <p className="text-zinc-400 text-sm">Adicione as despesas relacionadas à venda</p>
+                                <h2 className="text-lg font-semibold text-foreground">Despesas de Negociação</h2>
+                                <p className="text-muted-foreground text-sm">Adicione as despesas relacionadas à venda</p>
                             </div>
                         </div>
                         <Button
                             variant="outline"
                             onClick={addExpense}
-                            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                            className="border-input text-zinc-300 hover:bg-zinc-800"
                         >
                             <Plus className="h-4 w-4 mr-2" />
                             Adicionar
@@ -469,26 +469,26 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                                         <select
                                             value={expense.category}
                                             onChange={(e) => updateExpense(expense.id, 'category', e.target.value)}
-                                            className="w-full appearance-none bg-[#0a0e27] border border-zinc-700 text-white px-3 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none text-sm"
+                                            className="w-full appearance-none bg-background border border-input text-foreground px-3 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none text-sm"
                                         >
                                             {expenseCategories.map(cat => (
                                                 <option key={cat.value} value={cat.value}>{cat.label}</option>
                                             ))}
                                         </select>
-                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                                     </div>
                                     <Input
                                         value={expense.description}
                                         onChange={(e) => updateExpense(expense.id, 'description', e.target.value)}
                                         placeholder="Descrição (opcional)"
-                                        className="bg-[#0a0e27] border-zinc-700 text-white flex-1"
+                                        className="bg-background border-input text-foreground flex-1"
                                     />
                                     <div className="relative w-32">
                                         <span className="absolute left-2 top-1/2 -translate-y-1/2 text-zinc-500 text-sm">R$</span>
                                         <Input
                                             value={expense.value > 0 ? formatInputValue(expense.value) : ''}
                                             onChange={(e) => updateExpense(expense.id, 'value', handleCurrencyInput(e.target.value))}
-                                            className="bg-[#0a0e27] border-zinc-700 text-white pl-8 text-right text-sm"
+                                            className="bg-background border-input text-foreground pl-8 text-right text-sm"
                                             placeholder="0"
                                         />
                                     </div>
@@ -496,7 +496,7 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                                         variant="ghost"
                                         size="icon"
                                         onClick={() => removeExpense(expense.id)}
-                                        className="text-zinc-400 hover:text-red-500"
+                                        className="text-muted-foreground hover:text-red-500"
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
@@ -505,32 +505,32 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                         </div>
                     )}
 
-                    <div className="p-4 bg-[#0a0e27] rounded-lg space-y-2">
+                    <div className="p-4 bg-background rounded-lg space-y-2">
                         <div className="flex justify-between">
-                            <span className="text-zinc-400">Total Despesas:</span>
+                            <span className="text-muted-foreground">Total Despesas:</span>
                             <span className="text-red-500 font-semibold">- {formatCurrencyDisplay(totalExpenses)}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-zinc-400">Comissão Líquida:</span>
-                            <span className="text-xl font-bold text-emerald-500">{formatCurrencyDisplay(netCommission)}</span>
+                            <span className="text-muted-foreground">Comissão Líquida:</span>
+                            <span className="text-xl font-bold text-primary">{formatCurrencyDisplay(netCommission)}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Seção 4: Distribuição */}
-                <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
+                <div className="bg-card border border-border rounded-lg p-6">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
-                            <Users className="h-5 w-5 text-emerald-500" />
+                            <Users className="h-5 w-5 text-primary" />
                             <div>
-                                <h2 className="text-lg font-semibold text-white">Distribuição da Comissão</h2>
-                                <p className="text-zinc-400 text-sm">Defina como a comissão líquida será dividida</p>
+                                <h2 className="text-lg font-semibold text-foreground">Distribuição da Comissão</h2>
+                                <p className="text-muted-foreground text-sm">Defina como a comissão líquida será dividida</p>
                             </div>
                         </div>
                         <Button
                             variant="outline"
                             onClick={addParticipant}
-                            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                            className="border-input text-zinc-300 hover:bg-zinc-800"
                         >
                             <Plus className="h-4 w-4 mr-2" />
                             Adicionar
@@ -545,14 +545,14 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                                         <select
                                             value={participant.brokerId || ''}
                                             onChange={(e) => updateParticipant(participant.id, 'brokerId', e.target.value ? parseInt(e.target.value) : null)}
-                                            className="w-full appearance-none bg-[#0a0e27] border border-zinc-700 text-white px-3 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none text-sm"
+                                            className="w-full appearance-none bg-background border border-input text-foreground px-3 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none text-sm"
                                         >
                                             <option value="">Selecione um colaborador</option>
                                             {brokers.map(broker => (
                                                 <option key={broker.id} value={broker.id}>{broker.name}</option>
                                             ))}
                                         </select>
-                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                                     </div>
                                     <div className="relative w-24">
                                         <Input
@@ -560,13 +560,13 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                                             step="0.01"
                                             value={participant.commissionPercent || ''}
                                             onChange={(e) => updateParticipant(participant.id, 'commissionPercent', parseFloat(e.target.value) || 0)}
-                                            className="bg-[#0a0e27] border-zinc-700 text-white pr-6 text-sm"
+                                            className="bg-background border-input text-foreground pr-6 text-sm"
                                             placeholder="0"
                                         />
                                         <span className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 text-sm">%</span>
                                     </div>
                                     <div className="w-32 text-right">
-                                        <span className="text-emerald-500 font-semibold">
+                                        <span className="text-primary font-semibold">
                                             {formatCurrencyDisplay(participant.commissionValue)}
                                         </span>
                                     </div>
@@ -575,15 +575,15 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                                             type="checkbox"
                                             checked={participant.isResponsible}
                                             onChange={(e) => updateParticipant(participant.id, 'isResponsible', e.target.checked)}
-                                            className="w-4 h-4 rounded border-zinc-600 bg-zinc-800 text-emerald-500 focus:ring-emerald-500"
+                                            className="w-4 h-4 rounded border-border bg-background text-primary focus:ring-primary"
                                         />
-                                        <span className="text-zinc-400 text-sm">Resp.</span>
+                                        <span className="text-muted-foreground text-sm">Resp.</span>
                                     </label>
                                     <Button
                                         variant="ghost"
                                         size="icon"
                                         onClick={() => removeParticipant(participant.id)}
-                                        className="text-zinc-400 hover:text-red-500"
+                                        className="text-muted-foreground hover:text-red-500"
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
@@ -592,16 +592,16 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                         </div>
                     )}
 
-                    <div className="p-4 bg-[#0a0e27] rounded-lg space-y-2">
+                    <div className="p-4 bg-background rounded-lg space-y-2">
                         <div className="flex justify-between">
-                            <span className="text-zinc-400">Total Distribuído:</span>
+                            <span className="text-muted-foreground">Total Distribuído:</span>
                             <span className={participants.reduce((s, p) => s + p.commissionPercent, 0) > 100 ? 'text-red-500' : 'text-amber-500'}>
                                 {participants.reduce((s, p) => s + p.commissionPercent, 0).toFixed(2)}% - {formatCurrencyDisplay(totalDistributed)}
                             </span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-zinc-400">Saldo Imobiliária:</span>
-                            <span className={`text-xl font-bold ${companyBalance >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                            <span className="text-muted-foreground">Saldo Imobiliária:</span>
+                            <span className={`text-xl font-bold ${companyBalance >= 0 ? 'text-primary' : 'text-red-500'}`}>
                                 {formatCurrencyDisplay(companyBalance)}
                             </span>
                         </div>
@@ -613,7 +613,7 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                     <Button
                         variant="outline"
                         onClick={() => router.back()}
-                        className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                        className="border-input text-zinc-300 hover:bg-zinc-800"
                     >
                         <ArrowLeft className="h-4 w-4 mr-2" />
                         Voltar
@@ -621,7 +621,7 @@ export function DealForm({ tenantId, slug, brokers }: DealFormProps) {
                     <Button
                         onClick={handleSubmit}
                         disabled={saving || !propertyTitle || saleValue <= 0}
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20 border border-primary/50"
                     >
                         {saving ? (
                             <>Salvando...</>

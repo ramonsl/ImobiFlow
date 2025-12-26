@@ -49,34 +49,34 @@ export function RankingClient({ tenantId }: RankingClientProps) {
         <div>
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-white mb-2">{getTabTitle()}</h1>
-                <p className="text-zinc-400">{getTabDescription()}</p>
+                <h1 className="text-3xl font-bold text-foreground mb-2">{getTabTitle()}</h1>
+                <p className="text-muted-foreground">{getTabDescription()}</p>
             </div>
 
             {/* Tabs */}
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-                <TabsList className="bg-[#1a1f3a] border border-zinc-800 p-1 mb-6">
+                <TabsList className="bg-card border border-border p-1 mb-6">
                     <TabsTrigger
                         value="anual"
-                        className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white text-zinc-400"
+                        className="data-[state=active]:bg-primary data-[state=active]:text-foreground text-muted-foreground"
                     >
                         Anual
                     </TabsTrigger>
                     <TabsTrigger
                         value="semestral"
-                        className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white text-zinc-400"
+                        className="data-[state=active]:bg-primary data-[state=active]:text-foreground text-muted-foreground"
                     >
                         Semestral
                     </TabsTrigger>
                     <TabsTrigger
                         value="trimestral"
-                        className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white text-zinc-400"
+                        className="data-[state=active]:bg-primary data-[state=active]:text-foreground text-muted-foreground"
                     >
                         Trimestral
                     </TabsTrigger>
                     <TabsTrigger
                         value="mensal"
-                        className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white text-zinc-400"
+                        className="data-[state=active]:bg-primary data-[state=active]:text-foreground text-muted-foreground"
                     >
                         Mensal
                     </TabsTrigger>

@@ -19,9 +19,9 @@ interface Broker {
 
 const typeLabels: Record<CollaboratorType, { label: string; color: string }> = {
     gestor: { label: 'Gestor', color: 'bg-purple-500/20 text-purple-400' },
-    corretor: { label: 'Corretor', color: 'bg-emerald-500/20 text-emerald-400' },
+    corretor: { label: 'Corretor', color: 'bg-primary/20 text-primary' },
     agenciador: { label: 'Agenciador', color: 'bg-blue-500/20 text-blue-400' },
-    outros: { label: 'Outros', color: 'bg-zinc-500/20 text-zinc-400' }
+    outros: { label: 'Outros', color: 'bg-zinc-500/20 text-muted-foreground' }
 }
 
 interface BrokerTableProps {
@@ -136,36 +136,36 @@ export function BrokerTable({ tenantId, initialYear, initialBrokers, companyMeta
     }
 
     return (
-        <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
+        <div className="bg-card border border-border rounded-lg p-6">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h2 className="text-lg font-semibold text-white">Colaboradores</h2>
-                    <p className="text-zinc-400 text-sm">Gerencie os colaboradores da imobiliária</p>
+                    <h2 className="text-lg font-semibold text-foreground">Colaboradores</h2>
+                    <p className="text-muted-foreground text-sm">Gerencie os colaboradores da imobiliária</p>
                 </div>
                 <div className="flex gap-3 items-center">
                     <div className="relative">
                         <select
                             value={year}
                             onChange={(e) => handleYearChange(parseInt(e.target.value))}
-                            className="appearance-none bg-[#0a0e27] border border-zinc-700 text-white px-4 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none"
+                            className="appearance-none bg-background border border-input text-foreground px-4 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none"
                         >
                             {years.map(y => (
                                 <option key={y} value={y}>{y}</option>
                             ))}
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                     </div>
                     <Button
                         variant="outline"
                         onClick={handleDistributeMeta}
-                        className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                        className="border-input text-zinc-300 hover:bg-zinc-800"
                     >
                         <Users className="h-4 w-4 mr-2" />
                         Diluir Meta
                     </Button>
                     <Button
                         onClick={handleAddBroker}
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
                         <Plus className="h-4 w-4 mr-2" />
                         Novo Colaborador
@@ -175,8 +175,8 @@ export function BrokerTable({ tenantId, initialYear, initialBrokers, companyMeta
 
             <div className="overflow-x-auto">
                 <table className="w-full">
-                    <thead className="border-b border-zinc-800">
-                        <tr className="text-zinc-400 text-sm">
+                    <thead className="border-b border-border">
+                        <tr className="text-muted-foreground text-sm">
                             <th className="text-left p-4 font-medium">Foto</th>
                             <th className="text-left p-4 font-medium">Nome</th>
                             <th className="text-left p-4 font-medium">Tipo</th>
@@ -188,10 +188,10 @@ export function BrokerTable({ tenantId, initialYear, initialBrokers, companyMeta
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan={6} className="text-center py-8 text-zinc-400">Carregando...</td>
+                                <td colSpan={6} className="text-center py-8 text-muted-foreground">Carregando...</td>
                             </tr>
                         ) : brokers.map((broker) => (
-                            <tr key={broker.id} className="border-b border-zinc-800/50 hover:bg-zinc-800/30">
+                            <tr key={broker.id} className="border-b border-border/50 hover:bg-zinc-800/30">
                                 <td className="p-4">
                                     {broker.avatarUrl ? (
                                         <img
@@ -200,13 +200,13 @@ export function BrokerTable({ tenantId, initialYear, initialBrokers, companyMeta
                                             className="w-10 h-10 rounded-full object-cover"
                                         />
                                     ) : (
-                                        <div className="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-white font-semibold text-sm">
+                                        <div className="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-foreground font-semibold text-sm">
                                             {getInitials(broker.name)}
                                         </div>
                                     )}
                                 </td>
                                 <td className="p-4">
-                                    <span className="text-white font-medium">{broker.name}</span>
+                                    <span className="text-foreground font-medium">{broker.name}</span>
                                 </td>
                                 <td className="p-4">
                                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${typeLabels[broker.type].color}`}>
@@ -214,7 +214,7 @@ export function BrokerTable({ tenantId, initialYear, initialBrokers, companyMeta
                                     </span>
                                 </td>
                                 <td className="p-4">
-                                    <span className="text-emerald-500 font-semibold">
+                                    <span className="text-primary font-semibold">
                                         {formatCurrency(broker.metaAnual)}
                                     </span>
                                 </td>
@@ -222,7 +222,7 @@ export function BrokerTable({ tenantId, initialYear, initialBrokers, companyMeta
                                     <Switch
                                         checked={broker.active}
                                         onCheckedChange={(checked) => handleToggleActive(broker.id, checked)}
-                                        className="data-[state=checked]:bg-emerald-500"
+                                        className="data-[state=checked]:bg-primary"
                                     />
                                 </td>
                                 <td className="p-4">
@@ -231,7 +231,7 @@ export function BrokerTable({ tenantId, initialYear, initialBrokers, companyMeta
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => handleEditBroker(broker)}
-                                            className="text-zinc-400 hover:text-white"
+                                            className="text-muted-foreground hover:text-foreground"
                                         >
                                             <Pencil className="h-4 w-4" />
                                         </Button>
@@ -239,7 +239,7 @@ export function BrokerTable({ tenantId, initialYear, initialBrokers, companyMeta
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => handleDeleteBroker(broker.id)}
-                                            className="text-zinc-400 hover:text-red-500"
+                                            className="text-muted-foreground hover:text-red-500"
                                         >
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
@@ -252,7 +252,7 @@ export function BrokerTable({ tenantId, initialYear, initialBrokers, companyMeta
             </div>
 
             {!loading && brokers.length === 0 && (
-                <div className="text-center py-12 text-zinc-400">
+                <div className="text-center py-12 text-muted-foreground">
                     Nenhum colaborador cadastrado. Clique em "Novo Colaborador" para adicionar.
                 </div>
             )}

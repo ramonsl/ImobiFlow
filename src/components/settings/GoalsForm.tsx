@@ -75,35 +75,35 @@ export function GoalsForm({ tenantId, initialYear, initialMetaAnual, initialSupe
     }
 
     return (
-        <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6 mb-8">
+        <div className="bg-card border border-border rounded-lg p-6 mb-8">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h2 className="text-lg font-semibold text-white mb-1">Metas da Empresa</h2>
-                    <p className="text-zinc-400 text-sm">Defina as metas anuais da empresa</p>
+                    <h2 className="text-lg font-semibold text-foreground mb-1">Metas da Empresa</h2>
+                    <p className="text-muted-foreground text-sm">Defina as metas anuais da empresa</p>
                 </div>
                 <div className="relative">
                     <select
                         value={year}
                         onChange={(e) => handleYearChange(parseInt(e.target.value))}
-                        className="appearance-none bg-[#0a0e27] border border-zinc-700 text-white px-4 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none"
+                        className="appearance-none bg-background border border-input text-foreground px-4 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none"
                     >
                         {years.map(y => (
                             <option key={y} value={y}>{y}</option>
                         ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                 </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                    <label className="block text-sm text-zinc-400 mb-2">Meta Anual (R$)</label>
+                    <label className="block text-sm text-muted-foreground mb-2">Meta Anual (R$)</label>
                     <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">R$</span>
                         <Input
                             value={formatInputValue(metaAnual)}
                             onChange={(e) => handleCurrencyChange(e.target.value, setMetaAnual)}
-                            className="bg-[#0a0e27] border-zinc-700 text-white pl-10 text-right"
+                            className="bg-background border-input text-foreground pl-10 text-right"
                             placeholder="0"
                             disabled={loading}
                         />
@@ -113,13 +113,13 @@ export function GoalsForm({ tenantId, initialYear, initialMetaAnual, initialSupe
                     )}
                 </div>
                 <div>
-                    <label className="block text-sm text-zinc-400 mb-2">Super Meta (R$)</label>
+                    <label className="block text-sm text-muted-foreground mb-2">Super Meta (R$)</label>
                     <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">R$</span>
                         <Input
                             value={formatInputValue(superMeta)}
                             onChange={(e) => handleCurrencyChange(e.target.value, setSuperMeta)}
-                            className="bg-[#0a0e27] border-zinc-700 text-white pl-10 text-right"
+                            className="bg-background border-input text-foreground pl-10 text-right"
                             placeholder="0"
                             disabled={loading}
                         />
@@ -133,7 +133,7 @@ export function GoalsForm({ tenantId, initialYear, initialMetaAnual, initialSupe
             <Button
                 onClick={handleSave}
                 disabled={saving || loading}
-                className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Salvando...' : 'Salvar Metas'}

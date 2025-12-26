@@ -10,8 +10,8 @@ async function testResend() {
         const { data, error } = await resend.emails.send({
             from: 'onboarding@resend.dev',
             to: ['ramonsl@gmail.com'],
-            subject: 'Teste ImobiGestor',
-            html: '<p>Este é um email de teste do ImobiGestor!</p>',
+            subject: 'Teste ImobiFlow',
+            html: '<p>Este é um email de teste do ImobiFlow!</p>',
         });
 
         if (error) {

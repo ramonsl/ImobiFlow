@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
 
 // Cloudinary credentials from environment
-const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || "dxjpjfpnn"
+const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || "dmqf55xzl"
 const API_KEY = process.env.CLOUDINARY_API_KEY || "479565417367456"
 const API_SECRET = process.env.CLOUDINARY_API_SECRET || "PflTodrpYJVtilHJQ03OfaPN-lw"
 
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
         // Generate signature for signed upload
         const timestamp = Math.floor(Date.now() / 1000)
-        const folder = "imobigestor/avatars"
+        const folder = "imobiflow/avatars"
 
         // Create signature string
         const signatureString = `folder=${folder}&timestamp=${timestamp}${API_SECRET}`

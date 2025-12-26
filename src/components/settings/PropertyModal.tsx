@@ -118,7 +118,7 @@ export function PropertyModal({ isOpen, onClose, onSave, property, tenantId }: P
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="bg-[#1a1f3a] border-zinc-800 text-white max-w-lg">
+            <DialogContent className="bg-card border-border text-foreground max-w-lg">
                 <DialogHeader>
                     <DialogTitle className="text-xl font-semibold">
                         {property ? 'Editar Imóvel' : 'Novo Imóvel'}
@@ -129,33 +129,34 @@ export function PropertyModal({ isOpen, onClose, onSave, property, tenantId }: P
                     {/* Image */}
                     <div className="flex justify-center">
                         <div className="relative">
-                            <div className="w-32 h-24 rounded-lg bg-[#0a0e27] border border-zinc-700 flex items-center justify-center overflow-hidden">
+                            <div className="w-32 h-24 rounded-lg bg-background border border-input flex items-center justify-center overflow-hidden">
                                 {imageUrl ? (
                                     <img src={imageUrl} alt="Imóvel" className="w-full h-full object-cover" />
                                 ) : (
                                     <Home className="h-10 w-10 text-zinc-600" />
                                 )}
                             </div>
-                            <button
+                            <Button
                                 type="button"
-                                className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-colors"
+                                size="icon"
+                                className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full shadow-lg"
                                 onClick={() => {
                                     const url = prompt('URL da imagem:')
                                     if (url) setImageUrl(url)
                                 }}
                             >
-                                <Camera className="h-4 w-4 text-white" />
-                            </button>
+                                <Camera className="h-4 w-4" />
+                            </Button>
                         </div>
                     </div>
 
                     {/* Title */}
                     <div>
-                        <label className="block text-sm text-zinc-400 mb-1">Título *</label>
+                        <label className="block text-sm text-muted-foreground mb-1">Título *</label>
                         <Input
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            className={`bg-[#0a0e27] ${errors.title ? 'border-red-500' : 'border-zinc-700'} text-white`}
+                            className={`bg-background ${errors.title ? 'border-red-500' : 'border-input'} text-foreground`}
                             placeholder="Ex: Casa 3 quartos no Centro"
                         />
                         {errors.title && <span className="text-red-500 text-xs">{errors.title}</span>}
@@ -164,11 +165,11 @@ export function PropertyModal({ isOpen, onClose, onSave, property, tenantId }: P
                     {/* Type and Status */}
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-1">Tipo</label>
+                            <label className="block text-sm text-muted-foreground mb-1">Tipo</label>
                             <select
                                 value={type}
                                 onChange={(e) => setType(e.target.value)}
-                                className="w-full bg-[#0a0e27] border border-zinc-700 text-white px-3 py-2 rounded-md focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-input text-foreground px-3 py-2 rounded-md focus:outline-none focus:border-primary"
                             >
                                 <option value="">Selecione...</option>
                                 {propertyTypes.map(t => (
@@ -177,11 +178,11 @@ export function PropertyModal({ isOpen, onClose, onSave, property, tenantId }: P
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-1">Status</label>
+                            <label className="block text-sm text-muted-foreground mb-1">Status</label>
                             <select
                                 value={status}
                                 onChange={(e) => setStatus(e.target.value)}
-                                className="w-full bg-[#0a0e27] border border-zinc-700 text-white px-3 py-2 rounded-md focus:outline-none focus:border-emerald-500"
+                                className="w-full bg-background border border-input text-foreground px-3 py-2 rounded-md focus:outline-none focus:border-primary"
                             >
                                 {statusOptions.map(s => (
                                     <option key={s.value} value={s.value}>{s.label}</option>
@@ -192,22 +193,22 @@ export function PropertyModal({ isOpen, onClose, onSave, property, tenantId }: P
 
                     {/* Price */}
                     <div>
-                        <label className="block text-sm text-zinc-400 mb-1">Preço (R$)</label>
+                        <label className="block text-sm text-muted-foreground mb-1">Preço (R$)</label>
                         <Input
                             value={formatCurrency(price)}
                             onChange={(e) => setPrice(parseCurrency(e.target.value))}
-                            className="bg-[#0a0e27] border-zinc-700 text-white"
+                            className="bg-background border-input text-foreground"
                             placeholder="0"
                         />
                     </div>
 
                     {/* Address */}
                     <div>
-                        <label className="block text-sm text-zinc-400 mb-1">Endereço</label>
+                        <label className="block text-sm text-muted-foreground mb-1">Endereço</label>
                         <Input
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
-                            className="bg-[#0a0e27] border-zinc-700 text-white"
+                            className="bg-background border-input text-foreground"
                             placeholder="Rua, número, bairro"
                         />
                     </div>
@@ -215,20 +216,20 @@ export function PropertyModal({ isOpen, onClose, onSave, property, tenantId }: P
                     {/* City and State */}
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-1">Cidade</label>
+                            <label className="block text-sm text-muted-foreground mb-1">Cidade</label>
                             <Input
                                 value={city}
                                 onChange={(e) => setCity(e.target.value)}
-                                className="bg-[#0a0e27] border-zinc-700 text-white"
+                                className="bg-background border-input text-foreground"
                                 placeholder="Cidade"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-1">Estado</label>
+                            <label className="block text-sm text-muted-foreground mb-1">Estado</label>
                             <Input
                                 value={state}
                                 onChange={(e) => setState(e.target.value)}
-                                className="bg-[#0a0e27] border-zinc-700 text-white"
+                                className="bg-background border-input text-foreground"
                                 placeholder="UF"
                                 maxLength={2}
                             />
@@ -240,14 +241,14 @@ export function PropertyModal({ isOpen, onClose, onSave, property, tenantId }: P
                     <Button
                         variant="outline"
                         onClick={onClose}
-                        className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                        className="border-border text-muted-foreground hover:bg-accent"
                     >
                         Cancelar
                     </Button>
                     <Button
                         onClick={handleSubmit}
                         disabled={saving}
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
                         {saving ? 'Salvando...' : property ? 'Salvar' : 'Adicionar'}
                     </Button>

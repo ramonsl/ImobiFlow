@@ -97,6 +97,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         async redirect({ url, baseUrl }) {
             console.log("🔀 Redirect callback:", { url, baseUrl })
 
+            // Simply allow the redirect - role-based logic is handled in signIn callback
+            // and landing page auto-redirect
+
             // If it's an absolute URL starting with baseUrl, allow it
             if (url.startsWith(baseUrl)) {
                 console.log("✅ Using provided URL:", url)

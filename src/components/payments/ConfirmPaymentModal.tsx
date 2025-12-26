@@ -71,50 +71,50 @@ export function ConfirmPaymentModal({ isOpen, onClose, onConfirm, payment }: Con
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="bg-[#1a1f3a] border-zinc-800 text-white max-w-md">
+            <DialogContent className="bg-card border-border text-foreground max-w-md">
                 <DialogHeader>
                     <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-                        <Check className="h-5 w-5 text-emerald-500" />
+                        <Check className="h-5 w-5 text-primary" />
                         Confirmar Pagamento
                     </DialogTitle>
                 </DialogHeader>
 
                 <div className="space-y-4 py-4">
                     {/* Payment Info */}
-                    <div className="bg-[#0a0e27] rounded-lg p-4 space-y-2">
+                    <div className="bg-background rounded-lg p-4 space-y-2">
                         <div className="flex justify-between">
-                            <span className="text-zinc-400">Colaborador:</span>
-                            <span className="text-white font-medium">{payment.brokerName}</span>
+                            <span className="text-muted-foreground">Colaborador:</span>
+                            <span className="text-foreground font-medium">{payment.brokerName}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-zinc-400">Tipo:</span>
+                            <span className="text-muted-foreground">Tipo:</span>
                             <span className={`px-2 py-0.5 rounded text-xs font-medium ${payment.type === 'commission'
-                                    ? 'bg-emerald-500/20 text-emerald-400'
-                                    : 'bg-amber-500/20 text-amber-400'
+                                ? 'bg-primary/20 text-primary'
+                                : 'bg-amber-500/20 text-amber-400'
                                 }`}>
                                 {payment.type === 'commission' ? 'Comissão' : 'Reembolso'}
                             </span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-zinc-400">Descrição:</span>
-                            <span className="text-white">{payment.description || '-'}</span>
+                            <span className="text-muted-foreground">Descrição:</span>
+                            <span className="text-foreground">{payment.description || '-'}</span>
                         </div>
-                        <div className="flex justify-between border-t border-zinc-700 pt-2 mt-2">
-                            <span className="text-zinc-400 font-medium">Valor:</span>
-                            <span className="text-emerald-500 font-bold text-lg">{formatCurrency(payment.amount)}</span>
+                        <div className="flex justify-between border-t border-input pt-2 mt-2">
+                            <span className="text-muted-foreground font-medium">Valor:</span>
+                            <span className="text-primary font-bold text-lg">{formatCurrency(payment.amount)}</span>
                         </div>
                     </div>
 
                     {/* Receipt Upload */}
                     <div>
-                        <label className="block text-sm text-zinc-400 mb-2">
+                        <label className="block text-sm text-muted-foreground mb-2">
                             Comprovante de Pagamento (opcional)
                         </label>
                         <div className="flex items-center gap-4">
                             {receiptUrl ? (
-                                <div className="flex-1 bg-[#0a0e27] rounded-lg p-3 flex items-center justify-between">
+                                <div className="flex-1 bg-background rounded-lg p-3 flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <Receipt className="h-5 w-5 text-emerald-500" />
+                                        <Receipt className="h-5 w-5 text-primary" />
                                         <span className="text-sm text-zinc-300">Comprovante anexado</span>
                                     </div>
                                     <Button
@@ -131,7 +131,9 @@ export function ConfirmPaymentModal({ isOpen, onClose, onConfirm, payment }: Con
                                     <ImageUpload
                                         value={receiptUrl}
                                         onChange={setReceiptUrl}
-                                        className="w-full"
+                                        className="w-full h-32"
+                                        rounded={false}
+                                        placeholderIcon={<Upload className="h-8 w-8 text-zinc-500" />}
                                     />
                                     <p className="text-xs text-zinc-500 mt-1">Clique para fazer upload</p>
                                 </div>
@@ -141,12 +143,12 @@ export function ConfirmPaymentModal({ isOpen, onClose, onConfirm, payment }: Con
 
                     {/* Notes */}
                     <div>
-                        <label className="block text-sm text-zinc-400 mb-1">Observações</label>
+                        <label className="block text-sm text-muted-foreground mb-1">Observações</label>
                         <textarea
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                             placeholder="Ex: Pago via PIX, transferência bancária..."
-                            className="w-full bg-[#0a0e27] border border-zinc-700 text-white px-3 py-2 rounded-lg focus:border-emerald-500 focus:outline-none resize-none h-20"
+                            className="w-full bg-background border border-input text-foreground px-3 py-2 rounded-lg focus:border-primary focus:outline-none resize-none h-20"
                         />
                     </div>
                 </div>
@@ -158,7 +160,7 @@ export function ConfirmPaymentModal({ isOpen, onClose, onConfirm, payment }: Con
                     <Button
                         onClick={handleConfirm}
                         disabled={saving}
-                        className="bg-emerald-500 hover:bg-emerald-600"
+                        className="bg-primary hover:bg-primary/90"
                     >
                         {saving ? (
                             <>

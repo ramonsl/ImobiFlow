@@ -9,8 +9,12 @@ const nextConfig: NextConfig = {
       config.externals.push('whatsapp-web.js', 'puppeteer');
     }
     return config;
+  },
+  env: {
+    DATABASE_URL: process.env.DATABASE_URL,
   }
 };
 
 export default nextConfig;
+
 

@@ -1,7 +1,7 @@
-# Planejamento do Projeto ImobiGestor SaaS
+# Planejamento do Projeto ImobiFlow SaaS
 
 ## Visão Geral
-ImobiGestor é uma plataforma SaaS B2B projetada para imobiliárias gerenciarem suas operações financeiras, vendas, e promoverem a competitividade saudável através de rankings de vendas.
+ImobiFlow é uma plataforma SaaS B2B projetada para imobiliárias gerenciarem suas operações financeiras, vendas, e promoverem a competitividade saudável através de rankings de vendas.
 
 ## Stack Tecnológica Sugerida (Baseada no perfil do desenvolvedor)
 - **Frontend**: Next.js 14+ (App Router), Tailwind CSS, Shadcn/UI (para aparência premium).
@@ -20,7 +20,7 @@ ImobiGestor é uma plataforma SaaS B2B projetada para imobiliárias gerenciarem 
 
 *   **US01 - Cadastro de Imobiliária (Tenant)**
     *   **Como** administrador da imobiliária,
-    *   **Quero** criar uma conta no ImobiGestor,
+    *   **Quero** criar uma conta no ImobiFlow,
     *   **Para** que eu possa começar a usar o sistema.
     *   **Critérios de Aceite**:
         *   Formulário de cadastro com: Nome Fantasia, CNPJ (opcional inicialmente), Email Administrativo.
@@ -37,7 +37,7 @@ ImobiGestor é uma plataforma SaaS B2B projetada para imobiliárias gerenciarem 
         *   Definição de metas globais da empresa (ex: VGV Mensal almejado).
 
 *   **US03 - Gestão de Assinatura (Billing)**
-    *   **Como** SaaS Admin (dono do ImobiGestor),
+    *   **Como** SaaS Admin (dono do ImobiFlow),
     *   **Quero** visualizar assinantes e status de pagamento,
     *   **Para** garantir a receita do produto.
     *   **Critérios de Aceite**:
@@ -72,7 +72,7 @@ ImobiGestor é uma plataforma SaaS B2B projetada para imobiliárias gerenciarem 
 
 *   **US06 - Sincronização via API JetImóveis**
     *   **Como** imobiliária que usa JetImóveis,
-    *   **Quero** que meus imóveis apareçam automaticamente no ImobiGestor,
+    *   **Quero** que meus imóveis apareçam automaticamente no ImobiFlow,
     *   **Para** não ter retrabalho de cadastro.
     *   **Critérios de Aceite**:
         *   Rotina (Cron job) ou botão "Sincronizar Agora".

@@ -108,6 +108,7 @@ export default async function TenantDashboard({
         .select({
             brokerId: sales.brokerId,
             brokerName: brokers.name,
+            avatarUrl: brokers.avatarUrl,
             total: sql<string>`SUM(${sales.value})`,
         })
         .from(sales)
@@ -116,7 +117,7 @@ export default async function TenantDashboard({
             eq(sales.tenantId, tenant.id),
             eq(sales.year, currentYear)
         ))
-        .groupBy(sales.brokerId, brokers.name)
+        .groupBy(sales.brokerId, brokers.name, brokers.avatarUrl)
         .orderBy(sql`SUM(${sales.value}) DESC`)
         .limit(3)
 
@@ -127,7 +128,8 @@ export default async function TenantDashboard({
             name: item.brokerName,
             value: `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
             percentage: `+${percentage}%`,
-            position: (index + 1) as 1 | 2 | 3
+            position: (index + 1) as 1 | 2 | 3,
+            avatar: item.avatarUrl || undefined
         }
     })
 
@@ -137,6 +139,7 @@ export default async function TenantDashboard({
         .select({
             brokerId: sales.brokerId,
             brokerName: brokers.name,
+            avatarUrl: brokers.avatarUrl,
             total: sql<string>`SUM(${sales.value})`,
         })
         .from(sales)
@@ -146,7 +149,7 @@ export default async function TenantDashboard({
             eq(sales.year, currentYear),
             eq(sales.month, currentMonth)
         ))
-        .groupBy(sales.brokerId, brokers.name)
+        .groupBy(sales.brokerId, brokers.name, brokers.avatarUrl)
         .orderBy(sql`SUM(${sales.value}) DESC`)
         .limit(3)
 
@@ -158,7 +161,8 @@ export default async function TenantDashboard({
             name: item.brokerName,
             value: `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
             percentage: `+${percentage}%`,
-            position: (index + 1) as 1 | 2 | 3
+            position: (index + 1) as 1 | 2 | 3,
+            avatar: item.avatarUrl || undefined
         }
     })
 
@@ -230,15 +234,15 @@ export default async function TenantDashboard({
     ]
 
     return (
-        <div className="flex min-h-screen bg-[#0a0e27]">
-            <Sidebar tenantSlug={slug} tenantName={tenant.name} />
+        <div className="flex min-h-screen bg-background">
+            <Sidebar tenantSlug={slug} tenantName={tenant.name} logoUrl={tenant.logoUrl} />
 
             <main className="flex-1 ml-64 p-8">
                 {/* Header with Year Selector */}
                 <div className="flex items-center justify-between mb-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-white mb-2">Dashboard {currentYear}</h1>
-                        <p className="text-zinc-400">Visão geral de performance comercial</p>
+                        <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard {currentYear}</h1>
+                        <p className="text-muted-foreground">Visão geral de performance comercial</p>
                     </div>
                     <YearSelector currentYear={currentYear} slug={slug} />
                 </div>

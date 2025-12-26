@@ -13,8 +13,8 @@ interface SemesterChartProps {
 
 export function SemesterChart({ data }: SemesterChartProps) {
     return (
-        <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-white mb-6">Evolução Semestral</h3>
+        <div className="bg-card border border-border rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-6">Evolução Semestral</h3>
             <ResponsiveContainer width="100%" height={300}>
                 <BarChart
                     data={data}
@@ -30,7 +30,7 @@ export function SemesterChart({ data }: SemesterChartProps) {
                             borderRadius: '8px',
                             color: '#fff'
                         }}
-                        formatter={(value: number) => `R$ ${value.toLocaleString('pt-BR')}`}
+                        formatter={(value: number | undefined) => `R$ ${value?.toLocaleString('pt-BR') || '0'}`}
                     />
                     <Bar dataKey="value" fill="#4ade80" radius={[8, 8, 0, 0]} />
                 </BarChart>

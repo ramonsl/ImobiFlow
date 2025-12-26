@@ -2,14 +2,23 @@
 
 import { useState, useRef } from "react"
 import { Camera, Loader2, User } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface ImageUploadProps {
     value?: string
     onChange: (url: string) => void
     className?: string
+    rounded?: boolean
+    placeholderIcon?: React.ReactNode
 }
 
-export function ImageUpload({ value, onChange, className }: ImageUploadProps) {
+export function ImageUpload({
+    value,
+    onChange,
+    className,
+    rounded = true,
+    placeholderIcon
+}: ImageUploadProps) {
     const [uploading, setUploading] = useState(false)
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -56,29 +65,30 @@ export function ImageUpload({ value, onChange, className }: ImageUploadProps) {
 
     return (
         <div className={`relative ${className || ''}`}>
-            <div className="w-20 h-20 rounded-full bg-zinc-700 flex items-center justify-center overflow-hidden">
+            <div className={`w-full h-full ${rounded ? 'rounded-full' : 'rounded-lg'} bg-zinc-700 flex items-center justify-center overflow-hidden border border-input`}>
                 {value ? (
                     <img
                         src={value}
-                        alt="Avatar"
+                        alt="Upload"
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <User className="h-10 w-10 text-zinc-500" />
+                    placeholderIcon || <User className="h-10 w-10 text-zinc-500" />
                 )}
             </div>
-            <button
+            <Button
                 type="button"
+                size="icon"
                 disabled={uploading}
                 onClick={() => inputRef.current?.click()}
-                className="absolute bottom-0 right-0 w-7 h-7 bg-emerald-500 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-colors disabled:opacity-50"
+                className="absolute bottom-0 right-0 w-7 h-7 rounded-full shadow-lg"
             >
                 {uploading ? (
-                    <Loader2 className="h-3.5 w-3.5 text-white animate-spin" />
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 ) : (
-                    <Camera className="h-3.5 w-3.5 text-white" />
+                    <Camera className="h-3.5 w-3.5" />
                 )}
-            </button>
+            </Button>
             <input
                 ref={inputRef}
                 type="file"

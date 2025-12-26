@@ -30,20 +30,20 @@ export function SettingsTabs({ children }: SettingsTabsProps) {
     return (
         <div>
             {/* Tab Navigation */}
-            <div className="flex border-b border-zinc-800 mb-8 overflow-x-auto">
+            <div className="flex border-b border-border mb-8 overflow-x-auto">
                 {tabs.map((tab) => (
                     <button
                         key={tab.key}
                         onClick={() => setActiveTab(tab.key)}
                         className={`flex items-center gap-2 px-6 py-3 text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === tab.key
-                            ? 'text-emerald-400'
-                            : 'text-zinc-400 hover:text-zinc-200'
+                            ? 'text-primary'
+                            : 'text-muted-foreground hover:text-foreground'
                             }`}
                     >
                         {tab.icon}
                         {tab.label}
                         {activeTab === tab.key && (
-                            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500" />
+                            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
                         )}
                     </button>
                 ))}

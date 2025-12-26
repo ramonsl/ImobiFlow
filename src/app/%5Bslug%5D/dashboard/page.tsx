@@ -28,7 +28,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ slug
                 }}
                 className="mt-10"
             >
-                <button type="submit" className="bg-red-500 text-white px-4 py-2 rounded">
+                <button type="submit" className="bg-red-500 text-foreground px-4 py-2 rounded">
                     Sair
                 </button>
             </form>

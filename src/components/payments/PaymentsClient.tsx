@@ -197,8 +197,8 @@ export function PaymentsClient({ tenantId, slug }: PaymentsClientProps) {
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-white mb-2">Pagamentos</h1>
-                    <p className="text-zinc-400">Gerencie comissões e reembolsos</p>
+                    <h1 className="text-3xl font-bold text-foreground mb-2">Pagamentos</h1>
+                    <p className="text-muted-foreground">Gerencie comissões e reembolsos</p>
                 </div>
                 <div className="flex items-center gap-4">
                     {/* Month Selector */}
@@ -206,30 +206,30 @@ export function PaymentsClient({ tenantId, slug }: PaymentsClientProps) {
                         <select
                             value={selectedMonth}
                             onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                            className="appearance-none bg-[#1a1f3a] border border-zinc-700 text-white px-4 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none"
+                            className="appearance-none bg-card border border-input text-foreground px-4 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none"
                         >
                             {months.map((month, idx) => (
                                 <option key={idx} value={idx + 1}>{month}</option>
                             ))}
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                     </div>
                     {/* Year Selector */}
                     <div className="relative">
                         <select
                             value={selectedYear}
                             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                            className="appearance-none bg-[#1a1f3a] border border-zinc-700 text-white px-4 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none"
+                            className="appearance-none bg-card border border-input text-foreground px-4 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none"
                         >
                             {years.map(year => (
                                 <option key={year} value={year}>{year}</option>
                             ))}
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                     </div>
                     <Button
                         onClick={handleAddReimbursement}
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
                         <Plus className="h-4 w-4 mr-2" />
                         Novo Reembolso
@@ -239,59 +239,59 @@ export function PaymentsClient({ tenantId, slug }: PaymentsClientProps) {
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
+                <div className="bg-card border border-border rounded-lg p-6">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 bg-amber-500/20 rounded-lg">
                             <DollarSign className="h-5 w-5 text-amber-500" />
                         </div>
-                        <span className="text-zinc-400 text-sm">Pendente</span>
+                        <span className="text-muted-foreground text-sm">Pendente</span>
                     </div>
                     <p className="text-2xl font-bold text-amber-500">{formatCurrency(summary.totalPending)}</p>
                 </div>
-                <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
+                <div className="bg-card border border-border rounded-lg p-6">
                     <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 bg-emerald-500/20 rounded-lg">
-                            <Check className="h-5 w-5 text-emerald-500" />
+                        <div className="p-2 bg-primary/20 rounded-lg">
+                            <Check className="h-5 w-5 text-primary" />
                         </div>
-                        <span className="text-zinc-400 text-sm">Pago</span>
+                        <span className="text-muted-foreground text-sm">Pago</span>
                     </div>
-                    <p className="text-2xl font-bold text-emerald-500">{formatCurrency(summary.totalPaid)}</p>
+                    <p className="text-2xl font-bold text-primary">{formatCurrency(summary.totalPaid)}</p>
                 </div>
-                <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
+                <div className="bg-card border border-border rounded-lg p-6">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 bg-blue-500/20 rounded-lg">
                             <Receipt className="h-5 w-5 text-blue-500" />
                         </div>
-                        <span className="text-zinc-400 text-sm">Não Registrado</span>
+                        <span className="text-muted-foreground text-sm">Não Registrado</span>
                     </div>
                     <p className="text-2xl font-bold text-blue-500">{formatCurrency(summary.totalUnregistered)}</p>
                 </div>
-                <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
+                <div className="bg-card border border-border rounded-lg p-6">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 bg-zinc-500/20 rounded-lg">
-                            <Calendar className="h-5 w-5 text-zinc-400" />
+                            <Calendar className="h-5 w-5 text-muted-foreground" />
                         </div>
-                        <span className="text-zinc-400 text-sm">Total do Mês</span>
+                        <span className="text-muted-foreground text-sm">Total do Mês</span>
                     </div>
-                    <p className="text-2xl font-bold text-white">{formatCurrency(summary.total)}</p>
+                    <p className="text-2xl font-bold text-foreground">{formatCurrency(summary.total)}</p>
                 </div>
             </div>
 
             {loading ? (
                 <div className="flex items-center justify-center py-12">
-                    <Loader2 className="h-8 w-8 text-emerald-500 animate-spin" />
+                    <Loader2 className="h-8 w-8 text-primary animate-spin" />
                 </div>
             ) : (
                 <div className="space-y-6">
                     {/* Pending Commissions (not yet registered) */}
                     {pendingCommissions.length > 0 && (
-                        <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg overflow-hidden">
-                            <div className="px-6 py-4 border-b border-zinc-800">
-                                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                        <div className="bg-card border border-border rounded-lg overflow-hidden">
+                            <div className="px-6 py-4 border-b border-border">
+                                <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
                                     <Receipt className="h-5 w-5 text-blue-500" />
                                     Comissões Não Registradas
                                 </h2>
-                                <p className="text-zinc-400 text-sm">Comissões de vendas que ainda não foram adicionadas para pagamento</p>
+                                <p className="text-muted-foreground text-sm">Comissões de vendas que ainda não foram adicionadas para pagamento</p>
                             </div>
                             <div className="divide-y divide-zinc-800">
                                 {pendingCommissions.map((commission) => (
@@ -301,24 +301,24 @@ export function PaymentsClient({ tenantId, slug }: PaymentsClientProps) {
                                                 {commission.brokerAvatarUrl ? (
                                                     <img src={commission.brokerAvatarUrl} alt="" className="w-full h-full object-cover" />
                                                 ) : (
-                                                    <span className="text-lg font-bold text-zinc-400">
+                                                    <span className="text-lg font-bold text-muted-foreground">
                                                         {commission.brokerName?.charAt(0)}
                                                     </span>
                                                 )}
                                             </div>
                                             <div>
-                                                <p className="text-white font-medium">{commission.brokerName}</p>
-                                                <p className="text-zinc-400 text-sm">{commission.propertyTitle}</p>
+                                                <p className="text-foreground font-medium">{commission.brokerName}</p>
+                                                <p className="text-muted-foreground text-sm">{commission.propertyTitle}</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-4">
-                                            <span className="text-emerald-500 font-semibold">
+                                            <span className="text-primary font-semibold">
                                                 {formatCurrency(commission.commissionValue)}
                                             </span>
                                             <Button
                                                 size="sm"
                                                 onClick={() => handleRegisterCommission(commission)}
-                                                className="bg-blue-500 hover:bg-blue-600 text-white"
+                                                className="bg-blue-500 hover:bg-blue-600 text-white shadow-md shadow-blue-500/20"
                                             >
                                                 <Plus className="h-4 w-4 mr-1" />
                                                 Registrar
@@ -331,28 +331,28 @@ export function PaymentsClient({ tenantId, slug }: PaymentsClientProps) {
                     )}
 
                     {/* Payments Table */}
-                    <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg overflow-hidden">
-                        <div className="px-6 py-4 border-b border-zinc-800">
-                            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                                <DollarSign className="h-5 w-5 text-emerald-500" />
+                    <div className="bg-card border border-border rounded-lg overflow-hidden">
+                        <div className="px-6 py-4 border-b border-border">
+                            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                                <DollarSign className="h-5 w-5 text-primary" />
                                 Pagamentos do Mês
                             </h2>
                         </div>
                         {payments.length === 0 ? (
                             <div className="px-6 py-12 text-center">
                                 <DollarSign className="h-12 w-12 text-zinc-600 mx-auto mb-4" />
-                                <p className="text-zinc-400">Nenhum pagamento registrado para este mês</p>
+                                <p className="text-muted-foreground">Nenhum pagamento registrado para este mês</p>
                             </div>
                         ) : (
                             <table className="w-full">
                                 <thead className="bg-zinc-800/50">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-zinc-400 uppercase">Colaborador</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-zinc-400 uppercase">Tipo</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-zinc-400 uppercase">Descrição</th>
-                                        <th className="px-6 py-3 text-right text-xs font-medium text-zinc-400 uppercase">Valor</th>
-                                        <th className="px-6 py-3 text-center text-xs font-medium text-zinc-400 uppercase">Status</th>
-                                        <th className="px-6 py-3 text-right text-xs font-medium text-zinc-400 uppercase">Ações</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Colaborador</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Tipo</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase">Descrição</th>
+                                        <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Valor</th>
+                                        <th className="px-6 py-3 text-center text-xs font-medium text-muted-foreground uppercase">Status</th>
+                                        <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-zinc-800">
@@ -364,36 +364,36 @@ export function PaymentsClient({ tenantId, slug }: PaymentsClientProps) {
                                                         {payment.brokerAvatarUrl ? (
                                                             <img src={payment.brokerAvatarUrl} alt="" className="w-full h-full object-cover" />
                                                         ) : (
-                                                            <span className="text-sm font-bold text-zinc-400">
+                                                            <span className="text-sm font-bold text-muted-foreground">
                                                                 {payment.brokerName?.charAt(0)}
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <span className="text-white">{payment.brokerName}</span>
+                                                    <span className="text-foreground">{payment.brokerName}</span>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className={`px-2 py-1 rounded text-xs font-medium ${payment.type === 'commission'
-                                                        ? 'bg-emerald-500/20 text-emerald-400'
-                                                        : 'bg-amber-500/20 text-amber-400'
+                                                    ? 'bg-primary/20 text-primary'
+                                                    : 'bg-amber-500/20 text-amber-400'
                                                     }`}>
                                                     {payment.type === 'commission' ? 'Comissão' : 'Reembolso'}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-zinc-400 text-sm">
+                                            <td className="px-6 py-4 text-muted-foreground text-sm">
                                                 {payment.description || '-'}
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <span className="text-emerald-500 font-semibold">
+                                                <span className="text-primary font-semibold">
                                                     {formatCurrency(payment.amount)}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 text-center">
                                                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${payment.status === 'paid'
-                                                        ? 'bg-emerald-500/20 text-emerald-400'
-                                                        : payment.status === 'cancelled'
-                                                            ? 'bg-red-500/20 text-red-400'
-                                                            : 'bg-amber-500/20 text-amber-400'
+                                                    ? 'bg-primary/20 text-primary'
+                                                    : payment.status === 'cancelled'
+                                                        ? 'bg-red-500/20 text-red-400'
+                                                        : 'bg-amber-500/20 text-amber-400'
                                                     }`}>
                                                     {payment.status === 'paid' ? 'Pago' : payment.status === 'cancelled' ? 'Cancelado' : 'Pendente'}
                                                 </span>
@@ -404,7 +404,7 @@ export function PaymentsClient({ tenantId, slug }: PaymentsClientProps) {
                                                         <Button
                                                             size="sm"
                                                             onClick={() => handleConfirmPayment(payment)}
-                                                            className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                                                            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20"
                                                         >
                                                             <Check className="h-4 w-4 mr-1" />
                                                             Pagar

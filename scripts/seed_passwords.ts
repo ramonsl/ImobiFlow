@@ -47,26 +47,26 @@ async function main() {
         console.log("Super Admin created:", superAdminEmail)
     }
 
-    // 3. Create Tenant Admin (Agency Owner)
+    // 3. Create Tenant Manager (Agency Owner)
     const tenantAdminEmail = "dono@confianca.com.br"
     const existingTenantAdmin = await db.select().from(users).where(eq(users.email, tenantAdminEmail)).then(res => res[0])
 
     if (existingTenantAdmin) {
         await db.update(users).set({
             password: hashedPassword,
-            role: "admin",
+            role: "manager", // Changed from "admin" to "manager"
             tenantId: tenant.id
         }).where(eq(users.email, tenantAdminEmail))
-        console.log("Tenant Admin updated:", tenantAdminEmail)
+        console.log("Tenant Manager updated:", tenantAdminEmail)
     } else {
         await db.insert(users).values({
             name: "João Corretor (Dono)",
             email: tenantAdminEmail,
-            role: "admin",
+            role: "manager", // Changed from "admin" to "manager"
             password: hashedPassword,
             tenantId: tenant.id
         })
-        console.log("Tenant Admin created:", tenantAdminEmail)
+        console.log("Tenant Manager created:", tenantAdminEmail)
     }
 
     console.log("\nSuccess! Accounts created/updated with password: 'senha123'")

@@ -16,7 +16,7 @@ export default async function PagamentosPage({ params }: { params: Promise<{ slu
 
     // Get tenant info
     const tenant = await db
-        .select({ id: tenants.id, name: tenants.name })
+        .select({ id: tenants.id, name: tenants.name, logoUrl: tenants.logoUrl })
         .from(tenants)
         .where(eq(tenants.slug, slug))
         .limit(1)
@@ -26,8 +26,8 @@ export default async function PagamentosPage({ params }: { params: Promise<{ slu
     }
 
     return (
-        <div className="flex min-h-screen bg-[#0a0e27]">
-            <Sidebar tenantSlug={slug} tenantName={tenant[0].name} />
+        <div className="flex min-h-screen bg-background">
+            <Sidebar tenantSlug={slug} tenantName={tenant[0].name} logoUrl={tenant[0].logoUrl} />
             <main className="flex-1 ml-64 p-8">
                 <PaymentsClient
                     tenantId={tenant[0].id}

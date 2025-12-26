@@ -24,8 +24,8 @@ export default async function RankingPage({ params }: { params: Promise<{ slug: 
     }
 
     return (
-        <div className="flex min-h-screen bg-[#0a0e27]">
-            <Sidebar tenantSlug={slug} tenantName={tenant.name} />
+        <div className="flex min-h-screen bg-background">
+            <Sidebar tenantSlug={slug} tenantName={tenant.name} logoUrl={tenant.logoUrl} />
 
             <main className="flex-1 ml-64 p-8">
                 <RankingClient tenantId={tenant.id} />

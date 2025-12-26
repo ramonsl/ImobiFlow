@@ -156,9 +156,9 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
 
     const getStatusBadge = (status: string) => {
         const badges: Record<string, { bg: string; text: string }> = {
-            active: { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
+            active: { bg: 'bg-primary/20', text: 'text-primary' },
             sold: { bg: 'bg-amber-500/20', text: 'text-amber-400' },
-            inactive: { bg: 'bg-zinc-500/20', text: 'text-zinc-400' }
+            inactive: { bg: 'bg-zinc-500/20', text: 'text-muted-foreground' }
         }
         const badge = badges[status] || badges.inactive
         return (
@@ -190,14 +190,14 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                     onComplete={handleSyncComplete}
                 />
             )}
-            <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
+            <div className="bg-card border border-border rounded-lg p-6">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
-                        <Home className="h-5 w-5 text-emerald-500" />
+                        <Home className="h-5 w-5 text-primary" />
                         <div>
-                            <h2 className="text-lg font-semibold text-white">Imóveis</h2>
-                            <p className="text-zinc-400 text-sm">{filteredProperties.length} imóveis encontrados</p>
+                            <h2 className="text-lg font-semibold text-foreground">Imóveis</h2>
+                            <p className="text-muted-foreground text-sm">{filteredProperties.length} imóveis encontrados</p>
                         </div>
                     </div>
                     <div className="flex gap-3">
@@ -205,7 +205,7 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                             variant="outline"
                             onClick={handleSyncJetimoveis}
                             disabled={syncing || !jetimoveisToken}
-                            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                            className="border-input text-zinc-300 hover:bg-zinc-800"
                         >
                             <RefreshCw className={`h-4 w-4 mr-2 ${syncing ? 'animate-spin' : ''}`} />
                             Sync JetImóveis
@@ -213,14 +213,14 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                         <Button
                             variant="outline"
                             onClick={() => setIsImportModalOpen(true)}
-                            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                            className="border-input text-zinc-300 hover:bg-zinc-800"
                         >
                             <Upload className="h-4 w-4 mr-2" />
                             Importar
                         </Button>
                         <Button
                             onClick={handleAddProperty}
-                            className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                            className="bg-primary hover:bg-primary/90 text-primary-foreground"
                         >
                             <Plus className="h-4 w-4 mr-2" />
                             Novo Imóvel
@@ -232,12 +232,12 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                 <div className="flex flex-wrap items-center gap-3 mb-6">
                     {/* Search */}
                     <div className="relative flex-1 min-w-[200px]">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                             placeholder="Buscar por título, endereço ou cidade..."
                             value={searchQuery}
                             onChange={(e) => { setSearchQuery(e.target.value); handleFilterChange() }}
-                            className="pl-10 bg-[#0a0e27] border-zinc-700 text-white"
+                            className="pl-10 bg-background border-input text-foreground"
                         />
                     </div>
 
@@ -246,13 +246,13 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                         <select
                             value={statusFilter}
                             onChange={(e) => { setStatusFilter(e.target.value as typeof statusFilter); handleFilterChange() }}
-                            className="appearance-none bg-[#0a0e27] border border-zinc-700 text-white px-4 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none text-sm"
+                            className="appearance-none bg-background border border-input text-foreground px-4 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none text-sm"
                         >
                             <option value="all">Todos Status</option>
                             <option value="active">Ativos</option>
                             <option value="sold">Vendidos</option>
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                     </div>
 
                     {/* Source Filter */}
@@ -260,14 +260,14 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                         <select
                             value={sourceFilter}
                             onChange={(e) => { setSourceFilter(e.target.value as typeof sourceFilter); handleFilterChange() }}
-                            className="appearance-none bg-[#0a0e27] border border-zinc-700 text-white px-4 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none text-sm"
+                            className="appearance-none bg-background border border-input text-foreground px-4 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none text-sm"
                         >
                             <option value="all">Todas Origens</option>
                             <option value="manual">Manual</option>
                             <option value="jetimoveis">JetImóveis</option>
                             <option value="spreadsheet">Planilha</option>
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                     </div>
 
                     {/* Type Filter */}
@@ -276,14 +276,14 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                             <select
                                 value={typeFilter}
                                 onChange={(e) => { setTypeFilter(e.target.value); handleFilterChange() }}
-                                className="appearance-none bg-[#0a0e27] border border-zinc-700 text-white px-4 py-2 pr-10 rounded-lg focus:border-emerald-500 focus:outline-none text-sm"
+                                className="appearance-none bg-background border border-input text-foreground px-4 py-2 pr-10 rounded-lg focus:border-primary focus:outline-none text-sm"
                             >
                                 <option value="all">Todos Tipos</option>
                                 {propertyTypes.map(type => (
                                     <option key={type} value={type}>{type}</option>
                                 ))}
                             </select>
-                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                         </div>
                     )}
                 </div>
@@ -291,8 +291,8 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                 {/* Table */}
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="border-b border-zinc-800">
-                            <tr className="text-zinc-400 text-sm">
+                        <thead className="border-b border-border">
+                            <tr className="text-muted-foreground text-sm">
                                 <th className="text-left p-4 font-medium">Foto</th>
                                 <th className="text-left p-4 font-medium">Título</th>
                                 <th className="text-left p-4 font-medium">Localização</th>
@@ -305,7 +305,7 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                         </thead>
                         <tbody>
                             {paginatedProperties.map((property) => (
-                                <tr key={property.id} className="border-b border-zinc-800/50 hover:bg-zinc-800/30">
+                                <tr key={property.id} className="border-b border-border/50 hover:bg-zinc-800/30">
                                     <td className="p-4">
                                         {property.imageUrl ? (
                                             <img
@@ -320,10 +320,10 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                                         )}
                                     </td>
                                     <td className="p-4">
-                                        <span className="text-white font-medium line-clamp-1">{property.title}</span>
+                                        <span className="text-foreground font-medium line-clamp-1">{property.title}</span>
                                     </td>
                                     <td className="p-4">
-                                        <span className="text-zinc-400 text-sm">
+                                        <span className="text-muted-foreground text-sm">
                                             {property.city && property.state
                                                 ? `${property.city}, ${property.state}`
                                                 : property.address || '-'
@@ -331,10 +331,10 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                                         </span>
                                     </td>
                                     <td className="p-4">
-                                        <span className="text-zinc-400 capitalize text-sm">{property.type || '-'}</span>
+                                        <span className="text-muted-foreground capitalize text-sm">{property.type || '-'}</span>
                                     </td>
                                     <td className="p-4">
-                                        <span className="text-emerald-500 font-semibold">
+                                        <span className="text-primary font-semibold">
                                             {property.price ? formatCurrency(property.price) : '-'}
                                         </span>
                                     </td>
@@ -350,7 +350,7 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => handleEditProperty(property)}
-                                                className="text-zinc-400 hover:text-white"
+                                                className="text-muted-foreground hover:text-foreground"
                                             >
                                                 <Pencil className="h-4 w-4" />
                                             </Button>
@@ -358,7 +358,7 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => handleDeleteProperty(property.id)}
-                                                className="text-zinc-400 hover:text-red-500"
+                                                className="text-muted-foreground hover:text-red-500"
                                             >
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>
@@ -372,7 +372,7 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
 
                 {/* Empty State */}
                 {filteredProperties.length === 0 && (
-                    <div className="text-center py-12 text-zinc-400">
+                    <div className="text-center py-12 text-muted-foreground">
                         {properties.length === 0
                             ? 'Nenhum imóvel cadastrado. Clique em "Novo Imóvel" para adicionar.'
                             : 'Nenhum imóvel encontrado com os filtros selecionados.'
@@ -382,8 +382,8 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                    <div className="flex items-center justify-between mt-6 pt-4 border-t border-zinc-800">
-                        <p className="text-sm text-zinc-400">
+                    <div className="flex items-center justify-between mt-6 pt-4 border-t border-border">
+                        <p className="text-sm text-muted-foreground">
                             Mostrando {((currentPage - 1) * ITEMS_PER_PAGE) + 1} a {Math.min(currentPage * ITEMS_PER_PAGE, filteredProperties.length)} de {filteredProperties.length}
                         </p>
                         <div className="flex items-center gap-2">
@@ -392,7 +392,7 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                                 size="icon"
                                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                 disabled={currentPage === 1}
-                                className="border-zinc-700 text-zinc-400 hover:text-white disabled:opacity-50"
+                                className="border-input text-muted-foreground hover:text-foreground disabled:opacity-50"
                             >
                                 <ChevronLeft className="h-4 w-4" />
                             </Button>
@@ -415,8 +415,8 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                                         size="icon"
                                         onClick={() => setCurrentPage(pageNum)}
                                         className={currentPage === pageNum
-                                            ? "bg-emerald-500 text-white"
-                                            : "border-zinc-700 text-zinc-400 hover:text-white"
+                                            ? "bg-primary text-foreground"
+                                            : "border-input text-muted-foreground hover:text-foreground"
                                         }
                                     >
                                         {pageNum}
@@ -429,7 +429,7 @@ export function PropertyTable({ tenantId, initialProperties, jetimoveisToken }: 
                                 size="icon"
                                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                 disabled={currentPage === totalPages}
-                                className="border-zinc-700 text-zinc-400 hover:text-white disabled:opacity-50"
+                                className="border-input text-muted-foreground hover:text-foreground disabled:opacity-50"
                             >
                                 <ChevronRight className="h-4 w-4" />
                             </Button>

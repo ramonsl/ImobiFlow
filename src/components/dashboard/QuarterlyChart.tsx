@@ -15,10 +15,10 @@ interface QuarterlyChartProps {
 const CustomTooltip = ({ active, payload }: { active?: boolean, payload?: Array<{ payload: { value: number; quarter: string } }> }) => {
     if (active && payload && payload.length) {
         return (
-            <div className="bg-[#1a1f3a] border border-zinc-700 rounded-lg p-3">
-                <p className="text-white font-semibold">{payload[0].payload.quarter}</p>
-                <p className="text-emerald-500 text-sm">
-                    Faturamento: R$ {payload[0].value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            <div className="bg-card border border-input rounded-lg p-3">
+                <p className="text-foreground font-semibold">{payload[0].payload.quarter}</p>
+                <p className="text-primary text-sm">
+                    Faturamento: R$ {payload[0].payload.value?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) || '0'}
                 </p>
             </div>
         )
@@ -28,8 +28,8 @@ const CustomTooltip = ({ active, payload }: { active?: boolean, payload?: Array<
 
 export function QuarterlyChart({ data }: QuarterlyChartProps) {
     return (
-        <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-white mb-6">Evolução Trimestral</h3>
+        <div className="bg-card border border-border rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-6">Evolução Trimestral</h3>
             <ResponsiveContainer width="100%" height={300}>
                 <BarChart
                     data={data}

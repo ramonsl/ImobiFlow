@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { RefreshCw, Check, AlertCircle, X } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface SyncStatusBannerProps {
     tenantId: number
@@ -68,16 +69,16 @@ export function SyncStatusBanner({ tenantId, onComplete }: SyncStatusBannerProps
         : 0
 
     return (
-        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-md ${isRunning ? 'bg-blue-900/90 border border-blue-500' :
-                isCompleted ? 'bg-emerald-900/90 border border-emerald-500' :
-                    'bg-red-900/90 border border-red-500'
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-2xl max-w-md animate-in slide-in-from-top-4 duration-300 ${isRunning ? 'bg-blue-900/90 border border-blue-500' :
+            isCompleted ? 'bg-primary/20 border border-primary backdrop-blur-md' :
+                'bg-red-900/90 border border-red-500'
             }`}>
             <div className="flex items-start gap-3">
                 {isRunning && (
                     <RefreshCw className="h-5 w-5 text-blue-400 animate-spin flex-shrink-0 mt-0.5" />
                 )}
                 {isCompleted && (
-                    <Check className="h-5 w-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                 )}
                 {isFailed && (
                     <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
@@ -85,16 +86,16 @@ export function SyncStatusBanner({ tenantId, onComplete }: SyncStatusBannerProps
 
                 <div className="flex-1">
                     <p className={`font-medium ${isRunning ? 'text-blue-200' :
-                            isCompleted ? 'text-emerald-200' :
-                                'text-red-200'
+                        isCompleted ? 'text-primary' :
+                            'text-red-200'
                         }`}>
                         {isRunning ? 'Sincronizando JetImóveis...' :
                             isCompleted ? 'Sincronização Concluída!' :
                                 'Erro na Sincronização'}
                     </p>
                     <p className={`text-sm mt-1 ${isRunning ? 'text-blue-300' :
-                            isCompleted ? 'text-emerald-300' :
-                                'text-red-300'
+                        isCompleted ? 'text-foreground' :
+                            'text-red-300'
                         }`}>
                         {status.message || status.error}
                     </p>
@@ -115,19 +116,21 @@ export function SyncStatusBanner({ tenantId, onComplete }: SyncStatusBannerProps
                     )}
 
                     {isCompleted && (
-                        <p className="text-xs text-emerald-400 mt-2">
+                        <p className="text-xs text-primary mt-2">
                             Recarregando página...
                         </p>
                     )}
                 </div>
 
                 {(isCompleted || isFailed) && (
-                    <button
+                    <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => setDismissed(true)}
-                        className="text-zinc-400 hover:text-white"
+                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
                     >
                         <X className="h-4 w-4" />
-                    </button>
+                    </Button>
                 )}
             </div>
         </div>

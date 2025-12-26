@@ -17,14 +17,14 @@ interface FeedbackModalProps {
 }
 
 const icons: Record<FeedbackType, React.ReactNode> = {
-    success: <CheckCircle className="h-12 w-12 text-emerald-500" />,
+    success: <CheckCircle className="h-12 w-12 text-primary" />,
     error: <XCircle className="h-12 w-12 text-red-500" />,
     warning: <AlertCircle className="h-12 w-12 text-amber-500" />,
     info: <Info className="h-12 w-12 text-blue-500" />
 }
 
 const colors: Record<FeedbackType, string> = {
-    success: 'text-emerald-500',
+    success: 'text-primary',
     error: 'text-red-500',
     warning: 'text-amber-500',
     info: 'text-blue-500'
@@ -48,7 +48,7 @@ export function FeedbackModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="bg-[#1a1f3a] border-zinc-800 text-white max-w-md">
+            <DialogContent className="bg-card border-border text-foreground max-w-md">
                 <DialogHeader>
                     <div className="flex flex-col items-center text-center pt-4">
                         {icons[type]}
@@ -66,10 +66,10 @@ export function FeedbackModal({
                     <Button
                         onClick={handleConfirm}
                         className={type === 'success'
-                            ? "bg-emerald-500 hover:bg-emerald-600 text-white"
+                            ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-md border border-primary/20"
                             : type === 'error'
-                                ? "bg-red-500 hover:bg-red-600 text-white"
-                                : "bg-zinc-600 hover:bg-zinc-700 text-white"
+                                ? "bg-red-500 hover:bg-red-600 text-white shadow-md border border-red-400/20"
+                                : "bg-muted hover:bg-muted/80 text-muted-foreground border border-border"
                         }
                     >
                         {confirmLabel}

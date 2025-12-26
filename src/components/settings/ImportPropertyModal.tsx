@@ -88,10 +88,10 @@ export function ImportPropertyModal({ isOpen, onClose, onImportComplete, tenantI
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <DialogContent className="bg-[#1a1f3a] border-zinc-800 text-white max-w-2xl">
+            <DialogContent className="bg-card border-border text-foreground max-w-2xl">
                 <DialogHeader>
                     <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-                        <FileSpreadsheet className="h-5 w-5 text-emerald-500" />
+                        <FileSpreadsheet className="h-5 w-5 text-primary" />
                         Importar Imóveis
                     </DialogTitle>
                 </DialogHeader>
@@ -99,12 +99,12 @@ export function ImportPropertyModal({ isOpen, onClose, onImportComplete, tenantI
                 <div className="py-4">
                     {!file ? (
                         <div
-                            className="border-2 border-dashed border-zinc-700 rounded-lg p-8 text-center cursor-pointer hover:border-emerald-500 transition-colors"
+                            className="border-2 border-dashed border-input rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
                             onClick={() => fileInputRef.current?.click()}
                         >
                             <Upload className="h-12 w-12 text-zinc-500 mx-auto mb-4" />
-                            <p className="text-white font-medium mb-2">Arraste um arquivo ou clique para selecionar</p>
-                            <p className="text-zinc-400 text-sm">Aceita arquivos CSV ou Excel (.csv, .xlsx)</p>
+                            <p className="text-foreground font-medium mb-2">Arraste um arquivo ou clique para selecionar</p>
+                            <p className="text-muted-foreground text-sm">Aceita arquivos CSV ou Excel (.csv, .xlsx)</p>
                             <input
                                 ref={fileInputRef}
                                 type="file"
@@ -116,12 +116,12 @@ export function ImportPropertyModal({ isOpen, onClose, onImportComplete, tenantI
                     ) : (
                         <div>
                             {/* File info */}
-                            <div className="flex items-center justify-between bg-[#0a0e27] p-4 rounded-lg mb-4">
+                            <div className="flex items-center justify-between bg-background p-4 rounded-lg mb-4">
                                 <div className="flex items-center gap-3">
-                                    <FileSpreadsheet className="h-8 w-8 text-emerald-500" />
+                                    <FileSpreadsheet className="h-8 w-8 text-primary" />
                                     <div>
-                                        <p className="text-white font-medium">{file.name}</p>
-                                        <p className="text-zinc-400 text-sm">
+                                        <p className="text-foreground font-medium">{file.name}</p>
+                                        <p className="text-muted-foreground text-sm">
                                             {(file.size / 1024).toFixed(1)} KB
                                         </p>
                                     </div>
@@ -133,7 +133,7 @@ export function ImportPropertyModal({ isOpen, onClose, onImportComplete, tenantI
                                         setFile(null)
                                         setPreview([])
                                     }}
-                                    className="text-zinc-400 hover:text-white"
+                                    className="text-muted-foreground hover:text-foreground"
                                 >
                                     <X className="h-4 w-4" />
                                 </Button>
@@ -142,13 +142,13 @@ export function ImportPropertyModal({ isOpen, onClose, onImportComplete, tenantI
                             {/* Preview */}
                             {preview.length > 0 && (
                                 <div className="mb-4">
-                                    <p className="text-sm text-zinc-400 mb-2">Prévia do arquivo:</p>
-                                    <div className="overflow-x-auto bg-[#0a0e27] rounded-lg">
+                                    <p className="text-sm text-muted-foreground mb-2">Prévia do arquivo:</p>
+                                    <div className="overflow-x-auto bg-background rounded-lg">
                                         <table className="w-full text-sm">
-                                            <thead className="border-b border-zinc-800">
+                                            <thead className="border-b border-border">
                                                 <tr>
                                                     {preview[0]?.map((cell, i) => (
-                                                        <th key={i} className="p-2 text-left text-zinc-400 font-medium">
+                                                        <th key={i} className="p-2 text-left text-muted-foreground font-medium">
                                                             {cell}
                                                         </th>
                                                     ))}
@@ -156,7 +156,7 @@ export function ImportPropertyModal({ isOpen, onClose, onImportComplete, tenantI
                                             </thead>
                                             <tbody>
                                                 {preview.slice(1).map((row, i) => (
-                                                    <tr key={i} className="border-b border-zinc-800/50">
+                                                    <tr key={i} className="border-b border-border/50">
                                                         {row.map((cell, j) => (
                                                             <td key={j} className="p-2 text-zinc-300">{cell}</td>
                                                         ))}
@@ -171,7 +171,7 @@ export function ImportPropertyModal({ isOpen, onClose, onImportComplete, tenantI
                             {/* Expected format */}
                             <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-4">
                                 <p className="text-blue-400 text-sm font-medium mb-2">Formato esperado:</p>
-                                <p className="text-zinc-400 text-xs">
+                                <p className="text-muted-foreground text-xs">
                                     Colunas: <code className="text-blue-300">titulo, endereco, cidade, estado, tipo, preco, imagem_url</code>
                                 </p>
                             </div>
@@ -190,14 +190,14 @@ export function ImportPropertyModal({ isOpen, onClose, onImportComplete, tenantI
                     <Button
                         variant="outline"
                         onClick={handleClose}
-                        className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                        className="border-input text-zinc-300 hover:bg-zinc-800"
                     >
                         Cancelar
                     </Button>
                     <Button
                         onClick={handleImport}
                         disabled={!file || importing}
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
                         <Check className="h-4 w-4 mr-2" />
                         {importing ? 'Importando...' : 'Importar'}

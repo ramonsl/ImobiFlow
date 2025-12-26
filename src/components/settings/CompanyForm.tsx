@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Save, Building2, Camera } from "lucide-react"
+import { Save, Building2 } from "lucide-react"
+import { ImageUpload } from "@/components/ui/ImageUpload"
 
 interface CompanyFormProps {
     tenantId: number
@@ -47,61 +48,45 @@ export function CompanyForm({ tenantId, initialName, initialCnpj, initialLogoUrl
     }
 
     return (
-        <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6 mb-8">
+        <div className="bg-card border border-border rounded-lg p-6 mb-8">
             <div className="flex items-center gap-3 mb-6">
-                <Building2 className="h-5 w-5 text-emerald-500" />
+                <Building2 className="h-5 w-5 text-primary" />
                 <div>
-                    <h2 className="text-lg font-semibold text-white">Dados da Imobiliária</h2>
-                    <p className="text-zinc-400 text-sm">Informações da empresa</p>
+                    <h2 className="text-lg font-semibold text-foreground">Dados da Imobiliária</h2>
+                    <p className="text-muted-foreground text-sm">Informações da empresa</p>
                 </div>
             </div>
 
             <div className="flex gap-6">
                 {/* Logo */}
                 <div className="flex-shrink-0">
-                    <div className="relative">
-                        <div className="w-24 h-24 rounded-lg bg-[#0a0e27] border border-zinc-700 flex items-center justify-center overflow-hidden">
-                            {logoUrl ? (
-                                <img
-                                    src={logoUrl}
-                                    alt="Logo"
-                                    className="w-full h-full object-contain"
-                                />
-                            ) : (
-                                <Building2 className="h-10 w-10 text-zinc-600" />
-                            )}
-                        </div>
-                        <button
-                            type="button"
-                            className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-colors"
-                            onClick={() => {
-                                const url = prompt('URL da logo:')
-                                if (url) setLogoUrl(url)
-                            }}
-                        >
-                            <Camera className="h-4 w-4 text-white" />
-                        </button>
-                    </div>
+                    <ImageUpload
+                        value={logoUrl}
+                        onChange={(url) => setLogoUrl(url)}
+                        className="w-24 h-24"
+                        rounded={false}
+                        placeholderIcon={<Building2 className="h-10 w-10 text-zinc-600" />}
+                    />
                 </div>
 
                 {/* Form fields */}
                 <div className="flex-1 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-2">Nome da Empresa *</label>
+                            <label className="block text-sm text-muted-foreground mb-2">Nome da Empresa *</label>
                             <Input
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="bg-[#0a0e27] border-zinc-700 text-white"
+                                className="bg-background border-input text-foreground"
                                 placeholder="Nome da imobiliária"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-2">CNPJ</label>
+                            <label className="block text-sm text-muted-foreground mb-2">CNPJ</label>
                             <Input
                                 value={cnpj}
                                 onChange={(e) => setCnpj(formatCnpj(e.target.value))}
-                                className="bg-[#0a0e27] border-zinc-700 text-white"
+                                className="bg-background border-input text-foreground"
                                 placeholder="XX.XXX.XXX/XXXX-XX"
                                 maxLength={18}
                             />
@@ -111,7 +96,7 @@ export function CompanyForm({ tenantId, initialName, initialCnpj, initialLogoUrl
                     <Button
                         onClick={handleSave}
                         disabled={saving || !name.trim()}
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
                         <Save className="h-4 w-4 mr-2" />
                         {saving ? 'Salvando...' : 'Salvar'}

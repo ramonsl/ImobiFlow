@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
                 brokerId: sales.brokerId,
                 brokerName: brokers.name,
                 brokerEmail: brokers.email,
+                avatarUrl: brokers.avatarUrl,
                 total: sql<string>`SUM(${sales.value})`,
             })
             .from(sales)
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
                 lte(sales.month, monthEnd),
                 search ? sql`LOWER(${brokers.name}) LIKE LOWER(${'%' + search + '%'})` : undefined
             ))
-            .groupBy(sales.brokerId, brokers.name, brokers.email)
+            .groupBy(sales.brokerId, brokers.name, brokers.email, brokers.avatarUrl)
             .orderBy(sql`SUM(${sales.value}) DESC`)
 
         // Fetch broker goals for the year
@@ -59,6 +60,7 @@ export async function GET(request: NextRequest) {
                 id: item.brokerId,
                 name: item.brokerName,
                 email: item.brokerEmail || `${item.brokerName.toLowerCase().replace(/\\s+/g, '.')}@email.com`,
+                avatarUrl: item.avatarUrl,
                 metaAnual,
                 vendido,
                 percentMeta

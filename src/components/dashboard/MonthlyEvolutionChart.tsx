@@ -13,8 +13,8 @@ interface MonthlyEvolutionChartProps {
 
 export function MonthlyEvolutionChart({ data }: MonthlyEvolutionChartProps) {
     return (
-        <div className="bg-[#1a1f3a] border border-zinc-800 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-white mb-6">Evolução Mensal</h3>
+        <div className="bg-card border border-border rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-6">Evolução Mensal</h3>
             <ResponsiveContainer width="100%" height={300}>
                 <LineChart
                     data={data}
@@ -30,7 +30,7 @@ export function MonthlyEvolutionChart({ data }: MonthlyEvolutionChartProps) {
                             borderRadius: '8px',
                             color: '#fff'
                         }}
-                        formatter={(value: number) => `R$ ${value.toLocaleString('pt-BR')}`}
+                        formatter={(value: number | undefined) => `R$ ${value?.toLocaleString('pt-BR') || '0'}`}
                     />
                     <Line
                         type="monotone"

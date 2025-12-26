@@ -35,14 +35,14 @@ export default async function NovaVendaPage({ params }: { params: Promise<{ slug
         .orderBy(brokers.name)
 
     return (
-        <div className="flex min-h-screen bg-[#0a0e27]">
-            <Sidebar tenantSlug={slug} tenantName={tenant.name} />
+        <div className="flex min-h-screen bg-background">
+            <Sidebar tenantSlug={slug} tenantName={tenant.name} logoUrl={tenant.logoUrl} />
 
             <main className="flex-1 ml-64 p-8">
                 <div className="max-w-4xl mx-auto">
                     <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-white mb-2">Nova Venda</h1>
-                        <p className="text-zinc-400">Cadastre uma nova venda de imóvel</p>
+                        <h1 className="text-3xl font-bold text-foreground mb-2">Nova Venda</h1>
+                        <p className="text-muted-foreground">Cadastre uma nova venda de imóvel</p>
                     </div>
 
                     <DealForm
