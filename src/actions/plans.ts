@@ -67,7 +67,7 @@ export async function createPlan(data: PlanInput) {
         if (error instanceof z.ZodError) {
             return {
                 success: false,
-                error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
+                error: (error as any).issues.map((e: any) => `${e.path.join('.')}: ${e.message}`).join(', '),
             }
         }
 
@@ -138,7 +138,7 @@ export async function updatePlan(id: number, data: Partial<PlanInput>) {
         if (error instanceof z.ZodError) {
             return {
                 success: false,
-                error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
+                error: (error as any).issues.map((e: any) => `${e.path.join('.')}: ${e.message}`).join(', '),
             }
         }
 
