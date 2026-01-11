@@ -64,6 +64,13 @@
       "when": 1768139725275,
       "tag": "0008_windy_bug",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1768142994525,
+      "tag": "0009_make_price_id_nullable",
+      "breakpoints": true
     }
   ]
 }

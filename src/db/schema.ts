@@ -248,7 +248,7 @@ export const subscriptionPlans = pgTable('subscription_plans', {
     id: serial('id').primaryKey(),
     name: text('name').notNull(), // 'Starter', 'Professional', 'Enterprise'
     slug: text('slug').notNull().unique(), // 'starter', 'professional', 'enterprise'
-    stripePriceId: text('stripe_price_id').notNull().unique(),
+    stripePriceId: text('stripe_price_id').unique(),
     amount: integer('amount').notNull(), // in cents (R$ 19,90 = 1990)
     currency: text('currency').default('brl'),
     interval: text('interval').notNull(), // 'month' or 'year'
