@@ -12,7 +12,10 @@ import { z } from 'zod'
 export const planSchema = z.object({
     name: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
     slug: z.string().min(3, 'Slug deve ter no mínimo 3 caracteres').regex(/^[a-z0-9-]+$/, 'Slug deve conter apenas letras minúsculas, números e hífens'),
-    stripePriceId: z.string().optional(),
+    stripePriceId: z.preprocess(
+        (val) => val === '' ? null : val,
+        z.string().nullable().optional()
+    ),
     amount: z.number().min(0, 'Valor deve ser maior ou igual a zero'),
     currency: z.enum(['brl', 'usd']).default('brl'),
     interval: z.enum(['month', 'year']).default('month'),
