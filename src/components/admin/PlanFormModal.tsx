@@ -157,7 +157,7 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
                                 id="amount"
                                 type="number"
                                 value={formData.amount}
-                                onChange={(e) => setFormData({ ...formData, amount: parseInt(e.target.value) })}
+                                onChange={(e) => setFormData({ ...formData, amount: e.target.value ? parseInt(e.target.value) : 0 })}
                                 placeholder="1990 = R$ 19,90"
                                 required
                             />
@@ -172,7 +172,7 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
                                 id="trialDays"
                                 type="number"
                                 value={formData.trialDays}
-                                onChange={(e) => setFormData({ ...formData, trialDays: parseInt(e.target.value) })}
+                                onChange={(e) => setFormData({ ...formData, trialDays: e.target.value ? parseInt(e.target.value) : 0 })}
                                 placeholder="0"
                             />
                         </div>
@@ -184,7 +184,7 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
                             <Input
                                 id="maxUsers"
                                 type="number"
-                                value={formData.maxUsers || ''}
+                                value={formData.maxUsers ?? ''}
                                 onChange={(e) => setFormData({ ...formData, maxUsers: e.target.value ? parseInt(e.target.value) : null })}
                                 placeholder="Ilimitado"
                             />
@@ -195,7 +195,7 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
                             <Input
                                 id="maxProperties"
                                 type="number"
-                                value={formData.maxProperties || ''}
+                                value={formData.maxProperties ?? ''}
                                 onChange={(e) => setFormData({ ...formData, maxProperties: e.target.value ? parseInt(e.target.value) : null })}
                                 placeholder="Ilimitado"
                             />
@@ -206,7 +206,7 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
                             <Input
                                 id="maxDeals"
                                 type="number"
-                                value={formData.maxDealsPerMonth || ''}
+                                value={formData.maxDealsPerMonth ?? ''}
                                 onChange={(e) => setFormData({ ...formData, maxDealsPerMonth: e.target.value ? parseInt(e.target.value) : null })}
                                 placeholder="Ilimitado"
                             />
