@@ -7,6 +7,11 @@ import { logSecurityEvent } from "@/lib/logger"
 export async function middleware(request: NextRequest, event: NextFetchEvent) {
     const { pathname } = request.nextUrl
 
+    // Skip middleware for webhooks (they have their own authentication via signature)
+    if (pathname.startsWith('/api/webhooks/')) {
+        return NextResponse.next()
+    }
+
     // Rate Limiting for API routes
     if (pathname.startsWith('/api/')) {
         if (ratelimit) {
