@@ -1,10 +1,10 @@
 // Feature permissions per plan
-export const PLAN_FEATURES = {
+export const PLAN_FEATURES: Record<string, string[]> = {
     starter_trial: ['brokers', 'ranking', 'tv_mode'], // During 1-month trial
     starter: ['*'], // After trial period - All features
     professional: ['*'], // All features
     enterprise: ['*'], // All features
-} as const
+}
 
 export const FEATURE_NAMES = {
     brokers: 'Cadastro de Corretores',

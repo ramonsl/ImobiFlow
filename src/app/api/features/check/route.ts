@@ -33,9 +33,22 @@ export async function GET(request: NextRequest) {
         const { getSubscription } = await import('@/lib/subscription-service')
         const subscription = await getSubscription(session.user.tenantId)
 
+        // Get plan name if subscription has a planId
+        let planName = null
+        if (subscription?.planId) {
+            const { db } = await import('@/lib/db')
+            const { subscriptionPlans } = await import('@/db/schema')
+            const { eq } = await import('drizzle-orm')
+
+            const plan = await db.query.subscriptionPlans.findFirst({
+                where: eq(subscriptionPlans.id, subscription.planId),
+            })
+            planName = plan?.name || null
+        }
+
         return NextResponse.json({
             hasAccess,
-            planName: subscription?.plan?.name || null,
+            planName,
             isInTrial: subscription?.status === 'trialing',
         })
     } catch (error) {

@@ -97,7 +97,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     }
 
     // Get full subscription details from Stripe
-    const stripeSubscription = await stripe.subscriptions.retrieve(subscriptionId)
+    const stripeSubscription = await stripe.subscriptions.retrieve(subscriptionId) as any
 
     // Create or update subscription in database
     const existing = await db.query.subscriptions.findFirst({
@@ -158,6 +158,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
  * Handle subscription updates
  */
 async function handleSubscriptionUpdate(stripeSubscription: Stripe.Subscription) {
+    const sub = stripeSubscription as any
     const tenantId = parseInt(stripeSubscription.metadata?.tenantId || '0')
 
     if (!tenantId) {
@@ -167,20 +168,20 @@ async function handleSubscriptionUpdate(stripeSubscription: Stripe.Subscription)
 
     await db.update(subscriptions)
         .set({
-            status: stripeSubscription.status,
-            currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000),
-            currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
-            cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
-            canceledAt: stripeSubscription.canceled_at
-                ? new Date(stripeSubscription.canceled_at * 1000)
+            status: sub.status,
+            currentPeriodStart: new Date(sub.current_period_start * 1000),
+            currentPeriodEnd: new Date(sub.current_period_end * 1000),
+            cancelAtPeriodEnd: sub.cancel_at_period_end,
+            canceledAt: sub.canceled_at
+                ? new Date(sub.canceled_at * 1000)
                 : null,
             updatedAt: new Date(),
         })
-        .where(eq(subscriptions.stripeSubscriptionId, stripeSubscription.id))
+        .where(eq(subscriptions.stripeSubscriptionId, sub.id))
 
     // Update tenant status
     await db.update(tenants)
-        .set({ subscriptionStatus: stripeSubscription.status })
+        .set({ subscriptionStatus: sub.status })
         .where(eq(tenants.id, tenantId))
 
     console.log(`✅ Subscription updated for tenant ${tenantId}`)
@@ -217,12 +218,13 @@ async function handleSubscriptionDeleted(stripeSubscription: Stripe.Subscription
  * Handle successful invoice payment
  */
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
-    const tenantId = parseInt(invoice.metadata?.tenantId || '0')
+    const inv = invoice as any
+    const tenantId = parseInt(inv.metadata?.tenantId || '0')
 
     if (!tenantId) {
         // Try to get tenantId from subscription
-        if (invoice.subscription) {
-            const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string)
+        if (inv.subscription) {
+            const subscription = await stripe.subscriptions.retrieve(inv.subscription as string) as any
             const subTenantId = parseInt(subscription.metadata?.tenantId || '0')
             if (subTenantId) {
                 await createInvoiceRecord(invoice, subTenantId)
@@ -258,6 +260,7 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
  * Create invoice record in database
  */
 async function createInvoiceRecord(invoice: Stripe.Invoice, tenantId: number) {
+    const inv = invoice as any
     const subscription = await db.query.subscriptions.findFirst({
         where: eq(subscriptions.tenantId, tenantId),
     })
@@ -265,18 +268,18 @@ async function createInvoiceRecord(invoice: Stripe.Invoice, tenantId: number) {
     await db.insert(invoices).values({
         tenantId,
         subscriptionId: subscription?.id || null,
-        stripeInvoiceId: invoice.id,
-        stripePaymentIntentId: invoice.payment_intent as string || null,
-        amount: invoice.amount_paid,
-        currency: invoice.currency,
-        status: invoice.status || 'paid',
-        invoiceUrl: invoice.hosted_invoice_url || null,
-        invoicePdf: invoice.invoice_pdf || null,
-        paidAt: invoice.status_transitions?.paid_at
-            ? new Date(invoice.status_transitions.paid_at * 1000)
+        stripeInvoiceId: inv.id,
+        stripePaymentIntentId: inv.payment_intent || null,
+        amount: inv.amount_paid,
+        currency: inv.currency,
+        status: inv.status || 'paid',
+        invoiceUrl: inv.hosted_invoice_url || null,
+        invoicePdf: inv.invoice_pdf || null,
+        paidAt: inv.status_transitions?.paid_at
+            ? new Date(inv.status_transitions.paid_at * 1000)
             : null,
-        dueDate: invoice.due_date
-            ? new Date(invoice.due_date * 1000)
+        dueDate: inv.due_date
+            ? new Date(inv.due_date * 1000)
             : null,
     })
 }
