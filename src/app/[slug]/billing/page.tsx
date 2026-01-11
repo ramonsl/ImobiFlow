@@ -11,7 +11,7 @@ import { CreditCard, Download, CheckCircle2, XCircle, Clock, TrendingUp } from '
 
 interface BillingPageProps {
     params: {
-        tenant: string
+        slug: string
     }
 }
 
@@ -24,7 +24,7 @@ export default async function BillingPage({ params }: BillingPageProps) {
 
     // Get tenant
     const tenant = await db.query.tenants.findFirst({
-        where: eq(tenants.slug, params.tenant),
+        where: eq(tenants.slug, params.slug),
     })
 
     if (!tenant) {
@@ -32,7 +32,7 @@ export default async function BillingPage({ params }: BillingPageProps) {
     }
 
     // Check access
-    if (session.user.role !== 'admin' && session.user.tenantSlug !== params.tenant) {
+    if (session.user.role !== 'admin' && session.user.tenantSlug !== params.slug) {
         redirect('/login')
     }
 
