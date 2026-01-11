@@ -1,13 +1,28 @@
 import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
 
+import { auth } from "@/auth"
+
 // Cloudinary credentials from environment
-const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || "dmqf55xzl"
-const API_KEY = process.env.CLOUDINARY_API_KEY || "479565417367456"
-const API_SECRET = process.env.CLOUDINARY_API_SECRET || "PflTodrpYJVtilHJQ03OfaPN-lw"
+const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME
+const API_KEY = process.env.CLOUDINARY_API_KEY
+const API_SECRET = process.env.CLOUDINARY_API_SECRET
+
+if (!CLOUD_NAME || !API_KEY || !API_SECRET) {
+    console.error("❌ Cloudinary credentials missing in environment variables")
+}
 
 export async function POST(request: NextRequest) {
     try {
+        const session = await auth()
+        if (!session?.user) {
+            return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+        }
+
+        if (!CLOUD_NAME || !API_KEY || !API_SECRET) {
+            return NextResponse.json({ error: "Erro de configuração do servidor" }, { status: 500 })
+        }
+
         const formData = await request.formData()
         const file = formData.get('file') as File
 
