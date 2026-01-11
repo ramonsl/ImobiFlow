@@ -40,26 +40,44 @@ export async function createPlan(data: PlanInput) {
         console.log('✅ createPlan validated:', validated)
 
         // Check if slug already exists
-        const existing = await db.query.subscriptionPlans.findFirst({
+        const existingSlug = await db.query.subscriptionPlans.findFirst({
             where: eq(subscriptionPlans.slug, validated.slug),
         })
 
-        if (existing) {
+        if (existingSlug) {
             return {
                 success: false,
                 error: 'Já existe um plano com este slug',
             }
         }
 
+        // Check if stripePriceId already exists (if provided)
+        if (validated.stripePriceId) {
+            const existingStripeId = await db.query.subscriptionPlans.findFirst({
+                where: eq(subscriptionPlans.stripePriceId, validated.stripePriceId),
+            })
+
+            if (existingStripeId) {
+                return {
+                    success: false,
+                    error: 'Já existe um plano com este ID do Stripe',
+                }
+            }
+        }
+
         // Create plan
         const [plan] = await db.insert(subscriptionPlans).values(validated).returning()
-        console.log('🎉 createPlan success:', plan)
+        console.log('🎉 createPlan success:', plan.id)
 
-        revalidatePath('/admin/plans')
+        try {
+            revalidatePath('/admin/plans')
+        } catch (e) {
+            console.error('❌ Revalidate failed:', e)
+        }
 
         return {
             success: true,
-            data: plan,
+            data: { id: plan.id },
         }
     } catch (error: any) {
         console.error('❌ Error creating plan:', error)
@@ -114,6 +132,20 @@ export async function updatePlan(id: number, data: Partial<PlanInput>) {
             }
         }
 
+        // If changing stripePriceId, check uniqueness
+        if (validated.stripePriceId && validated.stripePriceId !== existing.stripePriceId) {
+            const stripeIdExists = await db.query.subscriptionPlans.findFirst({
+                where: eq(subscriptionPlans.stripePriceId, validated.stripePriceId),
+            })
+
+            if (stripeIdExists) {
+                return {
+                    success: false,
+                    error: 'Já existe um plano com este ID do Stripe',
+                }
+            }
+        }
+
         // Update plan
         const [plan] = await db
             .update(subscriptionPlans)
@@ -124,13 +156,17 @@ export async function updatePlan(id: number, data: Partial<PlanInput>) {
             .where(eq(subscriptionPlans.id, id))
             .returning()
 
-        console.log('🎉 updatePlan success:', plan)
+        console.log('🎉 updatePlan success:', plan.id)
 
-        revalidatePath('/admin/plans')
+        try {
+            revalidatePath('/admin/plans')
+        } catch (e) {
+            console.error('❌ Revalidate failed:', e)
+        }
 
         return {
             success: true,
-            data: plan,
+            data: { id: plan.id },
         }
     } catch (error: any) {
         console.error('❌ Error updating plan:', error)
@@ -182,7 +218,11 @@ export async function deletePlan(id: number) {
         // Delete plan
         await db.delete(subscriptionPlans).where(eq(subscriptionPlans.id, id))
 
-        revalidatePath('/admin/plans')
+        try {
+            revalidatePath('/admin/plans')
+        } catch (e) {
+            console.error('❌ Revalidate failed:', e)
+        }
 
         return {
             success: true,
@@ -221,11 +261,15 @@ export async function togglePlanStatus(id: number) {
             .where(eq(subscriptionPlans.id, id))
             .returning()
 
-        revalidatePath('/admin/plans')
+        try {
+            revalidatePath('/admin/plans')
+        } catch (e) {
+            console.error('❌ Revalidate failed:', e)
+        }
 
         return {
             success: true,
-            data: plan,
+            data: { id: plan.id },
         }
     } catch (error) {
         console.error('Error toggling plan status:', error)
