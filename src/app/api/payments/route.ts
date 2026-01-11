@@ -4,6 +4,8 @@ import { payments, brokers, deals, dealParticipants } from "@/db/schema"
 import { eq, and, sql } from "drizzle-orm"
 import { auth } from "@/auth"
 import { validateTenantAccess } from "@/lib/auth-utils"
+import { paymentSchema } from "@/lib/schemas"
+import { logSecurityEvent } from "@/lib/logger"
 
 export async function GET(request: NextRequest) {
     try {
@@ -21,6 +23,13 @@ export async function GET(request: NextRequest) {
         }
 
         if (!validateTenantAccess(session, tenantId)) {
+            await logSecurityEvent({
+                event: 'ACCESS_DENIED',
+                tenantId,
+                userId: session.user.id,
+                path: '/api/payments',
+                details: `User ${session.user.id} attempted to access tenant ${tenantId}`
+            })
             return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 
@@ -121,6 +130,12 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json()
+        const validation = paymentSchema.safeParse(body)
+
+        if (!validation.success) {
+            return NextResponse.json({ error: validation.error.issues[0].message }, { status: 400 })
+        }
+
         const {
             tenantId,
             brokerId,
@@ -132,15 +147,16 @@ export async function POST(request: NextRequest) {
             referenceMonth,
             referenceYear,
             notes
-        } = body
-
-        if (!tenantId || !brokerId || !type || !amount || !referenceMonth || !referenceYear) {
-            return NextResponse.json({
-                error: "Campos obrigatórios: tenantId, brokerId, type, amount, referenceMonth, referenceYear"
-            }, { status: 400 })
-        }
+        } = validation.data
 
         if (!validateTenantAccess(session, tenantId)) {
+            await logSecurityEvent({
+                event: 'ACCESS_DENIED',
+                tenantId,
+                userId: session.user.id,
+                path: '/api/payments',
+                details: `User ${session.user.id} attempted to create payment for tenant ${tenantId}`
+            })
             return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 

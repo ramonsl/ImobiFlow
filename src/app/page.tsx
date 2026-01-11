@@ -6,7 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label"
 import { Building2, TrendingUp, Users, Trophy, BarChart3, Zap, Star, Quote, Tv } from "lucide-react"
 
-export default async function LandingPage() {
+export default async function LandingPage({
+  searchParams
+}: {
+  searchParams: Promise<{ error?: string }>
+}) {
   // Check if user is already logged in
   const session = await auth()
 
@@ -21,6 +25,9 @@ export default async function LandingPage() {
       redirect(`/${session.user.tenantSlug}/dashboard`)
     }
   }
+
+  const params = await searchParams
+  const error = params.error
 
   return (
     <div className="min-h-screen bg-background">
@@ -126,6 +133,16 @@ export default async function LandingPage() {
                 <CardDescription className="text-muted-foreground">
                   Entre com seu e-mail e senha para acessar o sistema.
                 </CardDescription>
+                {error === 'invalid_credentials' && (
+                  <div className="mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-600 text-sm">
+                    ❌ Email ou senha incorretos. Tente novamente.
+                  </div>
+                )}
+                {error === 'no_tenant' && (
+                  <div className="mt-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-600 text-sm">
+                    ⚠️ Usuário sem tenant associado. Entre em contato com o suporte.
+                  </div>
+                )}
               </CardHeader>
               <CardContent>
                 <form
@@ -134,35 +151,33 @@ export default async function LandingPage() {
                     const email = formData.get("email") as string
                     const password = formData.get("password") as string
 
-                    // Authenticate first
-                    const result = await signIn("credentials", {
-                      email,
-                      password,
-                      redirect: false
-                    })
-
-                    if (result?.error) {
-                      throw new Error("Invalid credentials")
-                    }
-
-                    // Get session to determine redirect
-                    const session = await auth()
-
-                    // Redirect based on user type
-                    if (!session?.user?.tenantSlug) {
-                      // Super Admin - redirect to SaaS admin panel
-                      await signIn("credentials", {
+                    try {
+                      // Authenticate with credentials
+                      const result = await signIn("credentials", {
                         email,
                         password,
-                        redirectTo: "/admin"
+                        redirect: false
                       })
-                    } else {
-                      // Tenant user - redirect to their dashboard
-                      await signIn("credentials", {
-                        email,
-                        password,
-                        redirectTo: `/${session.user.tenantSlug}/dashboard`
-                      })
+
+                      if (result?.error) {
+                        // Redirect back to home with error
+                        redirect("/?error=invalid_credentials")
+                      }
+
+                      // Get session to determine redirect
+                      const session = await auth()
+
+                      // Redirect based on user type
+                      if (session?.user?.role === 'admin') {
+                        redirect("/admin")
+                      } else if (session?.user?.tenantSlug) {
+                        redirect(`/${session.user.tenantSlug}/dashboard`)
+                      } else {
+                        redirect("/?error=no_tenant")
+                      }
+                    } catch (error) {
+                      console.error("Login error:", error)
+                      redirect("/?error=invalid_credentials")
                     }
                   }}
                   className="grid gap-4"

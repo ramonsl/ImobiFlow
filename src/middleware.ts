@@ -1,9 +1,28 @@
 import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import type { NextRequest, NextFetchEvent } from "next/server"
 import { auth } from "@/auth"
+import { ratelimit } from "@/lib/ratelimit"
+import { logSecurityEvent } from "@/lib/logger"
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest, event: NextFetchEvent) {
     const { pathname } = request.nextUrl
+
+    // Rate Limiting for API routes
+    if (pathname.startsWith('/api/')) {
+        if (ratelimit) {
+            const ip = request.ip || '127.0.0.1'
+            const { success } = await ratelimit.limit(ip)
+            if (!success) {
+                event.waitUntil(logSecurityEvent({
+                    event: 'RATE_LIMIT',
+                    ip,
+                    path: pathname,
+                    details: `Rate limit exceeded for IP ${ip}`
+                }))
+                return NextResponse.json({ error: "Too Many Requests" }, { status: 429 })
+            }
+        }
+    }
 
     // Skip middleware for public routes
     if (pathname === '/' || pathname === '/login' || pathname.startsWith('/api/auth')) {

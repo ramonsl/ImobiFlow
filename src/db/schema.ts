@@ -9,7 +9,8 @@ export const tenants = pgTable('tenants', {
     cnpj: text('cnpj'),
     logoUrl: text('logo_url'),
     stripeCustomerId: text('stripe_customer_id'),
-    subscriptionStatus: text('subscription_status').default('active'),
+    subscriptionStatus: text('subscription_status').default('trialing'), // trialing, active, past_due, canceled
+    trialEndsAt: timestamp('trial_ends_at'),
     jetimoveisToken: text('jetimoveis_token'),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()),
@@ -227,4 +228,69 @@ export const payments = pgTable('payments', {
     notes: text('notes'),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()),
+});
+
+// Security Logs (Auditoria de Segurança)
+export const securityLogs = pgTable('security_logs', {
+    id: serial('id').primaryKey(),
+    tenantId: integer('tenant_id').references(() => tenants.id), // pode ser nulo se falha antes de identificar tenant
+    userId: text('user_id').references(() => users.id),
+    event: text('event').notNull(), // LOGIN_FAILED, ACCESS_DENIED, RATE_LIMIT, etc
+    details: text('details'), // JSON stringified or text
+    ip: text('ip'),
+    userAgent: text('user_agent'),
+    path: text('path'),
+    createdAt: timestamp('created_at').defaultNow(),
+});
+
+// --- Billing Tables ---
+export const subscriptionPlans = pgTable('subscription_plans', {
+    id: serial('id').primaryKey(),
+    name: text('name').notNull(), // 'Starter', 'Professional', 'Enterprise'
+    slug: text('slug').notNull().unique(), // 'starter', 'professional', 'enterprise'
+    stripePriceId: text('stripe_price_id').notNull().unique(),
+    amount: integer('amount').notNull(), // in cents (R$ 19,90 = 1990)
+    currency: text('currency').default('brl'),
+    interval: text('interval').notNull(), // 'month' or 'year'
+    trialDays: integer('trial_days').default(0), // 30 for Starter, 0 for others
+    maxUsers: integer('max_users'), // null = unlimited
+    maxProperties: integer('max_properties'), // null = unlimited
+    maxDealsPerMonth: integer('max_deals_per_month'), // null = unlimited, 2 for Professional
+    features: text('features').array(), // ['brokers', 'ranking', 'tv_mode'] for trial
+    isActive: boolean('is_active').default(true),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()),
+});
+
+export const subscriptions = pgTable('subscriptions', {
+    id: serial('id').primaryKey(),
+    tenantId: integer('tenant_id').references(() => tenants.id).notNull().unique(),
+    stripeSubscriptionId: text('stripe_subscription_id').unique(),
+    stripeCustomerId: text('stripe_customer_id'),
+    planId: integer('plan_id').references(() => subscriptionPlans.id),
+    status: text('status').notNull(), // 'trialing', 'active', 'past_due', 'canceled', 'unpaid'
+    currentPeriodStart: timestamp('current_period_start'),
+    currentPeriodEnd: timestamp('current_period_end'),
+    trialStart: timestamp('trial_start'),
+    trialEnd: timestamp('trial_end'),
+    canceledAt: timestamp('canceled_at'),
+    cancelAtPeriodEnd: boolean('cancel_at_period_end').default(false),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()),
+});
+
+export const invoices = pgTable('invoices', {
+    id: serial('id').primaryKey(),
+    tenantId: integer('tenant_id').references(() => tenants.id).notNull(),
+    subscriptionId: integer('subscription_id').references(() => subscriptions.id),
+    stripeInvoiceId: text('stripe_invoice_id').unique(),
+    stripePaymentIntentId: text('stripe_payment_intent_id'),
+    amount: integer('amount').notNull(), // in cents
+    currency: text('currency').default('brl'),
+    status: text('status').notNull(), // 'draft', 'open', 'paid', 'void', 'uncollectible'
+    invoiceUrl: text('invoice_url'),
+    invoicePdf: text('invoice_pdf'),
+    paidAt: timestamp('paid_at'),
+    dueDate: timestamp('due_date'),
+    createdAt: timestamp('created_at').defaultNow(),
 });

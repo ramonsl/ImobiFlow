@@ -5,6 +5,7 @@ import { users, tenants } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
+import { logSecurityEvent } from "@/lib/logger"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     adapter: DrizzleAdapter(db),
@@ -23,6 +24,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
                 if (!credentials?.email || !credentials?.password) {
                     console.log("❌ Missing credentials")
+                    await logSecurityEvent({
+                        event: 'LOGIN_FAILED',
+                        details: 'Missing email or password',
+                        path: '/api/auth/callback/credentials'
+                    })
                     return null
                 }
 
@@ -42,6 +48,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
                 if (!user || !user.password) {
                     console.log("❌ User not found or no password")
+                    await logSecurityEvent({
+                        event: 'LOGIN_FAILED',
+                        details: `User not found: ${credentials.email}`,
+                        path: '/api/auth/callback/credentials'
+                    })
                     return null
                 }
 
@@ -54,6 +65,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
                 if (!isValidPassword) {
                     console.log("❌ Invalid password")
+                    await logSecurityEvent({
+                        event: 'LOGIN_FAILED',
+                        userId: user.id,
+                        tenantId: user.tenantId || undefined,
+                        details: `Invalid password for user: ${credentials.email}`,
+                        path: '/api/auth/callback/credentials'
+                    })
                     return null
                 }
 

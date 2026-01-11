@@ -5,6 +5,10 @@ import { eq, and, desc } from "drizzle-orm"
 import { sendSaleNotification, isConnected } from "@/lib/whatsapp"
 import { auth } from "@/auth"
 import { validateTenantAccess } from "@/lib/auth-utils"
+import { logSecurityEvent } from "@/lib/logger"
+import { dealSchema } from "@/lib/schemas"
+
+// ... (existing imports) ...
 
 // GET - List all deals for a tenant with participants
 export async function GET(request: NextRequest) {
@@ -22,6 +26,13 @@ export async function GET(request: NextRequest) {
         }
 
         if (!validateTenantAccess(session, tenantId)) {
+            await logSecurityEvent({
+                event: 'ACCESS_DENIED',
+                tenantId,
+                userId: session.user.id,
+                path: '/api/deals',
+                details: `User ${session.user.id} attempted to access tenant ${tenantId}`
+            })
             return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 
@@ -75,6 +86,15 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json()
+
+        const validation = dealSchema.safeParse(body)
+
+        if (!validation.success) {
+            return NextResponse.json({ error: validation.error.issues[0].message }, { status: 400 })
+        }
+
+
+
         const {
             tenantId,
             propertyId,
@@ -90,17 +110,18 @@ export async function POST(request: NextRequest) {
             netCommission,
             status,
             notes,
-            expenses = [],
-            participants = []
-        } = body
-
-        if (!tenantId || !propertyTitle || !saleValue) {
-            return NextResponse.json({
-                error: "Tenant ID, título do imóvel e valor da venda são obrigatórios"
-            }, { status: 400 })
-        }
+            expenses,
+            participants
+        } = validation.data
 
         if (!validateTenantAccess(session, tenantId)) {
+            await logSecurityEvent({
+                event: 'ACCESS_DENIED',
+                tenantId,
+                userId: session.user.id,
+                path: '/api/deals',
+                details: `User ${session.user.id} attempted to create deal for tenant ${tenantId}`
+            })
             return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 
@@ -112,7 +133,7 @@ export async function POST(request: NextRequest) {
                 propertyId: propertyId || null,
                 propertyTitle,
                 propertyAddress: propertyAddress || null,
-                saleDate: saleDate ? new Date(saleDate) : new Date(),
+                saleDate: saleDate,
                 saleValue: saleValue.toString(),
                 commissionType: commissionType || 'percent',
                 commissionPercent: commissionPercent?.toString() || null,
@@ -126,9 +147,9 @@ export async function POST(request: NextRequest) {
             .returning({ id: deals.id })
 
         // Create expenses
-        if (expenses.length > 0) {
+        if (expenses && expenses.length > 0) {
             await db.insert(dealExpenses).values(
-                expenses.map((exp: { category: string; description?: string; value: number }) => ({
+                expenses.map((exp) => ({
                     dealId: newDeal.id,
                     category: exp.category,
                     description: exp.description || null,
@@ -138,12 +159,12 @@ export async function POST(request: NextRequest) {
         }
 
         // Create participants and update sales/meta
-        const responsibleParticipants = participants.filter((p: { isResponsible: boolean }) => p.isResponsible)
+        const responsibleParticipants = participants.filter((p) => p.isResponsible)
         const metaShareValue = responsibleParticipants.length > 0
-            ? parseFloat(saleValue) / responsibleParticipants.length
+            ? saleValue / responsibleParticipants.length
             : 0
 
-        const saleDateObj = saleDate ? new Date(saleDate) : new Date()
+        const saleDateObj = saleDate
         const currentYear = saleDateObj.getFullYear()
 
         for (const participant of participants) {
@@ -182,10 +203,14 @@ export async function POST(request: NextRequest) {
         if (isConnected(tenantId)) {
             sendWhatsAppNotifications(
                 tenantId,
-                participants,
+                participants.map(p => ({
+                    brokerId: p.brokerId || null,
+                    commissionValue: p.commissionValue || 0,
+                    isResponsible: p.isResponsible || false
+                })),
                 propertyTitle,
-                propertyAddress,
-                parseFloat(saleValue),
+                propertyAddress || null,
+                saleValue,
                 saleDateObj,
                 currentYear
             ).catch(err => console.error('[WhatsApp] Notification error:', err))
