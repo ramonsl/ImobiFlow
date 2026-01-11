@@ -72,10 +72,14 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
         e.preventDefault()
         setLoading(true)
 
+        console.log('🚀 Submitting form...', { mode, formData })
+
         try {
             const result = mode === 'create'
                 ? await createPlan(formData as PlanInput)
                 : await updatePlan(plan.id, formData)
+
+            console.log('🔙 Server response:', result)
 
             if (result.success) {
                 toast({
@@ -84,6 +88,7 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
                 })
                 onClose()
             } else {
+                console.error('❌ Server returned error:', result.error)
                 toast({
                     title: 'Erro',
                     description: result.error,
@@ -91,6 +96,7 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
                 })
             }
         } catch (error) {
+            console.error('❌ Unexpected client error:', error)
             toast({
                 title: 'Erro',
                 description: 'Ocorreu um erro inesperado',
@@ -156,7 +162,7 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
                             <Input
                                 id="amount"
                                 type="number"
-                                value={formData.amount}
+                                value={formData.amount ?? 0}
                                 onChange={(e) => setFormData({ ...formData, amount: e.target.value ? parseInt(e.target.value) : 0 })}
                                 placeholder="1990 = R$ 19,90"
                                 required
@@ -171,7 +177,7 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
                             <Input
                                 id="trialDays"
                                 type="number"
-                                value={formData.trialDays}
+                                value={formData.trialDays ?? 0}
                                 onChange={(e) => setFormData({ ...formData, trialDays: e.target.value ? parseInt(e.target.value) : 0 })}
                                 placeholder="0"
                             />
