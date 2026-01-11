@@ -2,15 +2,26 @@ import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { payments, brokers, deals, dealParticipants } from "@/db/schema"
 import { eq, and, sql } from "drizzle-orm"
+import { auth } from "@/auth"
+import { validateTenantAccess } from "@/lib/auth-utils"
 
 export async function GET(request: NextRequest) {
     try {
+        const session = await auth()
+        if (!session?.user) {
+            return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+        }
+
         const tenantId = parseInt(request.nextUrl.searchParams.get("tenantId") || "0")
         const month = parseInt(request.nextUrl.searchParams.get("month") || new Date().getMonth() + 1 + "")
         const year = parseInt(request.nextUrl.searchParams.get("year") || new Date().getFullYear().toString())
 
         if (!tenantId) {
             return NextResponse.json({ error: "Tenant ID obrigatório" }, { status: 400 })
+        }
+
+        if (!validateTenantAccess(session, tenantId)) {
+            return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 
         // Get payments for the month
@@ -104,6 +115,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
+        const session = await auth()
+        if (!session?.user) {
+            return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+        }
+
         const body = await request.json()
         const {
             tenantId,
@@ -122,6 +138,10 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({
                 error: "Campos obrigatórios: tenantId, brokerId, type, amount, referenceMonth, referenceYear"
             }, { status: 400 })
+        }
+
+        if (!validateTenantAccess(session, tenantId)) {
+            return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 
         const [newPayment] = await db
