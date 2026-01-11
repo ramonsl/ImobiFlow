@@ -1,5 +1,6 @@
+import 'dotenv/config'
 import { db } from '@/lib/db'
-import { subscriptionPlans } from '@/db/schema'
+import { subscriptionPlans } from './schema'
 
 /**
  * Seed script for subscription plans
