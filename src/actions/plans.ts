@@ -33,9 +33,11 @@ export type PlanInput = z.infer<typeof planSchema>
  * Create a new subscription plan
  */
 export async function createPlan(data: PlanInput) {
+    console.log('📝 createPlan input:', data)
     try {
         // Validate input
         const validated = planSchema.parse(data)
+        console.log('✅ createPlan validated:', validated)
 
         // Check if slug already exists
         const existing = await db.query.subscriptionPlans.findFirst({
@@ -51,6 +53,7 @@ export async function createPlan(data: PlanInput) {
 
         // Create plan
         const [plan] = await db.insert(subscriptionPlans).values(validated).returning()
+        console.log('🎉 createPlan success:', plan)
 
         revalidatePath('/admin/plans')
 
@@ -58,18 +61,19 @@ export async function createPlan(data: PlanInput) {
             success: true,
             data: plan,
         }
-    } catch (error) {
+    } catch (error: any) {
+        console.error('❌ Error creating plan:', error)
+
         if (error instanceof z.ZodError) {
             return {
                 success: false,
-                error: error.errors[0].message,
+                error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
             }
         }
 
-        console.error('Error creating plan:', error)
         return {
             success: false,
-            error: 'Erro ao criar plano',
+            error: error.message || 'Erro desconhecido ao criar plano',
         }
     }
 }
@@ -78,9 +82,11 @@ export async function createPlan(data: PlanInput) {
  * Update an existing subscription plan
  */
 export async function updatePlan(id: number, data: Partial<PlanInput>) {
+    console.log('📝 updatePlan input:', { id, data })
     try {
         // Validate input
         const validated = planSchema.partial().parse(data)
+        console.log('✅ updatePlan validated:', validated)
 
         // Check if plan exists
         const existing = await db.query.subscriptionPlans.findFirst({
@@ -118,24 +124,27 @@ export async function updatePlan(id: number, data: Partial<PlanInput>) {
             .where(eq(subscriptionPlans.id, id))
             .returning()
 
+        console.log('🎉 updatePlan success:', plan)
+
         revalidatePath('/admin/plans')
 
         return {
             success: true,
             data: plan,
         }
-    } catch (error) {
+    } catch (error: any) {
+        console.error('❌ Error updating plan:', error)
+
         if (error instanceof z.ZodError) {
             return {
                 success: false,
-                error: error.errors[0].message,
+                error: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', '),
             }
         }
 
-        console.error('Error updating plan:', error)
         return {
             success: false,
-            error: 'Erro ao atualizar plano',
+            error: error.message || 'Erro desconhecido ao atualizar plano',
         }
     }
 }
