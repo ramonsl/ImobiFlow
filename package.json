@@ -6,8 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "test": "vitest"
+    "lint": "next lint",
+    "test": "vitest",
+    "migrate:create": "drizzle-kit generate",
+    "migrate:push": "drizzle-kit push",
+    "db:seed-plans": "node -r dotenv/config node_modules/.bin/tsx src/db/seed-plans.ts dotenv_config_path=.env.local"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
