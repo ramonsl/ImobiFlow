@@ -3,15 +3,26 @@ import { db } from "@/lib/db"
 import { deals, dealExpenses, dealParticipants, brokers, sales, brokerGoals } from "@/db/schema"
 import { eq, and, desc } from "drizzle-orm"
 import { sendSaleNotification, isConnected } from "@/lib/whatsapp"
+import { auth } from "@/auth"
+import { validateTenantAccess } from "@/lib/auth-utils"
 
 // GET - List all deals for a tenant with participants
 export async function GET(request: NextRequest) {
     try {
+        const session = await auth()
+        if (!session?.user) {
+            return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+        }
+
         const tenantId = parseInt(request.nextUrl.searchParams.get("tenantId") || "0")
         const year = parseInt(request.nextUrl.searchParams.get("year") || new Date().getFullYear().toString())
 
         if (!tenantId) {
             return NextResponse.json({ error: "Tenant ID obrigatório" }, { status: 400 })
+        }
+
+        if (!validateTenantAccess(session, tenantId)) {
+            return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 
         const dealsList = await db
@@ -58,6 +69,11 @@ export async function GET(request: NextRequest) {
 // POST - Create a new deal with expenses and participants
 export async function POST(request: NextRequest) {
     try {
+        const session = await auth()
+        if (!session?.user) {
+            return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+        }
+
         const body = await request.json()
         const {
             tenantId,
@@ -82,6 +98,10 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({
                 error: "Tenant ID, título do imóvel e valor da venda são obrigatórios"
             }, { status: 400 })
+        }
+
+        if (!validateTenantAccess(session, tenantId)) {
+            return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 
         // Create the deal
