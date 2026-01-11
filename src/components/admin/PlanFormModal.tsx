@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -21,18 +21,52 @@ export function PlanFormModal({ isOpen, onClose, plan, mode }: PlanFormModalProp
     const { toast } = useToast()
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState<Partial<PlanInput>>({
-        name: plan?.name || '',
-        slug: plan?.slug || '',
-        stripePriceId: plan?.stripePriceId || '',
-        amount: plan?.amount || 0,
-        currency: plan?.currency || 'brl',
-        interval: plan?.interval || 'month',
-        trialDays: plan?.trialDays || 0,
-        maxUsers: plan?.maxUsers,
-        maxProperties: plan?.maxProperties,
-        maxDealsPerMonth: plan?.maxDealsPerMonth,
-        isActive: plan?.isActive ?? true,
+        name: '',
+        slug: '',
+        stripePriceId: '',
+        amount: 0,
+        currency: 'brl',
+        interval: 'month',
+        trialDays: 0,
+        maxUsers: null,
+        maxProperties: null,
+        maxDealsPerMonth: null,
+        isActive: true,
     })
+
+    useEffect(() => {
+        if (isOpen) {
+            if (mode === 'edit' && plan) {
+                setFormData({
+                    name: plan.name,
+                    slug: plan.slug,
+                    stripePriceId: plan.stripePriceId || '',
+                    amount: plan.amount,
+                    currency: plan.currency,
+                    interval: plan.interval,
+                    trialDays: plan.trialDays || 0,
+                    maxUsers: plan.maxUsers,
+                    maxProperties: plan.maxProperties,
+                    maxDealsPerMonth: plan.maxDealsPerMonth,
+                    isActive: plan.isActive,
+                })
+            } else {
+                setFormData({
+                    name: '',
+                    slug: '',
+                    stripePriceId: '',
+                    amount: 0,
+                    currency: 'brl',
+                    interval: 'month',
+                    trialDays: 0,
+                    maxUsers: null,
+                    maxProperties: null,
+                    maxDealsPerMonth: null,
+                    isActive: true,
+                })
+            }
+        }
+    }, [isOpen, plan, mode])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
