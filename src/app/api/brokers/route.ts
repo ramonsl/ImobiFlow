@@ -2,15 +2,26 @@ import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { brokers, brokerGoals } from "@/db/schema"
 import { eq, and } from "drizzle-orm"
+import { auth } from "@/auth"
+import { validateTenantAccess } from "@/lib/auth-utils"
 
 // GET - List all brokers for a tenant with goals for a specific year
 export async function GET(request: NextRequest) {
     try {
+        const session = await auth()
+        if (!session?.user) {
+            return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+        }
+
         const tenantId = parseInt(request.nextUrl.searchParams.get("tenantId") || "0")
         const year = parseInt(request.nextUrl.searchParams.get("year") || new Date().getFullYear().toString())
 
         if (!tenantId) {
             return NextResponse.json({ error: "Tenant ID obrigatório" }, { status: 400 })
+        }
+
+        if (!validateTenantAccess(session, tenantId)) {
+            return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 
         // Fetch brokers
@@ -53,10 +64,19 @@ export async function GET(request: NextRequest) {
 // POST - Create a new broker
 export async function POST(request: NextRequest) {
     try {
+        const session = await auth()
+        if (!session?.user) {
+            return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+        }
+
         const { tenantId, name, type, metaAnual, avatarUrl, year } = await request.json()
 
         if (!tenantId || !name) {
             return NextResponse.json({ error: "Tenant ID e nome são obrigatórios" }, { status: 400 })
+        }
+
+        if (!validateTenantAccess(session, tenantId)) {
+            return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 
         // Create broker
