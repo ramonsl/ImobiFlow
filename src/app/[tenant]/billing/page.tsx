@@ -39,15 +39,19 @@ export default async function BillingPage({ params }: BillingPageProps) {
     // Get subscription
     const subscription = await db.query.subscriptions.findFirst({
         where: eq(subscriptions.tenantId, tenant.id),
-        with: {
-            plan: true,
-        },
     })
+
+    // Get plan separately if subscription exists
+    let currentPlan = null
+    if (subscription?.planId) {
+        currentPlan = await db.query.subscriptionPlans.findFirst({
+            where: eq(subscriptionPlans.id, subscription.planId),
+        })
+    }
 
     // Get all available plans
     const allPlans = await db.query.subscriptionPlans.findMany({
         where: eq(subscriptionPlans.isActive, true),
-        orderBy: (plans, { asc }) => [asc(plans.amount)],
     })
 
     // Get invoices
@@ -76,7 +80,6 @@ export default async function BillingPage({ params }: BillingPageProps) {
     }
 
     const isInTrial = subscription?.status === 'trialing'
-    const currentPlan = subscription?.plan
 
     return (
         <div className="container mx-auto py-8 space-y-8">
