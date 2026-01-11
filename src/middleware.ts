@@ -15,16 +15,16 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     // Rate Limiting for API routes
     if (pathname.startsWith('/api/')) {
         if (ratelimit) {
-            const ip = request.ip || '127.0.0.1'
+            const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '127.0.0.1'
             const { success } = await ratelimit.limit(ip)
             if (!success) {
                 event.waitUntil(logSecurityEvent({
                     event: 'RATE_LIMIT',
                     ip,
                     path: pathname,
-                    details: `Rate limit exceeded for IP ${ip}`
+                    details: `Rate limit exceeded for IP ${ip}`,
                 }))
-                return NextResponse.json({ error: "Too Many Requests" }, { status: 429 })
+                return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
             }
         }
     }

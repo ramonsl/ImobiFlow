@@ -74,16 +74,27 @@ export async function createCheckoutSession(data: CreateCheckoutSession) {
     return session
 }
 
-/**
- * Get subscription for a tenant
- */
 export async function getSubscription(tenantId: number) {
-    return await db.query.subscriptions.findFirst({
+    const subscription = await db.query.subscriptions.findFirst({
         where: eq(subscriptions.tenantId, tenantId),
-        with: {
-            plan: true,
-        },
     })
+
+    if (!subscription) {
+        return null
+    }
+
+    // Get plan separately if planId exists
+    let plan = null
+    if (subscription.planId) {
+        plan = await db.query.subscriptionPlans.findFirst({
+            where: eq(subscriptionPlans.id, subscription.planId),
+        })
+    }
+
+    return {
+        ...subscription,
+        plan,
+    }
 }
 
 /**
@@ -123,7 +134,7 @@ export async function updateSubscription(
             ],
             proration_behavior: data.prorationBehavior,
         }
-    )
+    ) as any
 
     // Update in database
     await db.update(subscriptions)
