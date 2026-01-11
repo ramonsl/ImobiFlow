@@ -50,6 +50,20 @@
       "when": 1766721306839,
       "tag": "0006_serious_domino",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768137206069,
+      "tag": "0007_security_logs",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1768139725275,
+      "tag": "0008_windy_bug",
+      "breakpoints": true
     }
   ]
 }

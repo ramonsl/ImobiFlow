@@ -72,7 +72,13 @@ describe('/api/deals/route', () => {
                 body: JSON.stringify({
                     tenantId: 2,
                     propertyTitle: 'Teste',
-                    saleValue: 1000
+                    saleValue: 1000,
+                    saleDate: new Date().toISOString(),
+                    participants: [{
+                        participantType: 'external',
+                        participantName: 'Test External',
+                        commissionPercent: 100
+                    }]
                 })
             })
             const res = await POST(req)

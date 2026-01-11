@@ -62,6 +62,8 @@ Este arquivo serve como **fonte de verdade** para agentes de IA entenderem o con
 8. **Performance** otimize o desempenho do sistema.
 9. **Security** use as boas praticas de segurança.
 10. **Clean Code**  use as boas praticas de programação.
+11. **Schema Validation:** Use Zod para validar todos os dados de entrada (API e Forms).
+12. **Security Logs:** Devem ser acessíveis APENAS por administradores.
 
 ---
 ### 🔄 Migrações e Schema

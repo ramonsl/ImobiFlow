@@ -4,6 +4,8 @@ import { brokers, brokerGoals } from "@/db/schema"
 import { eq, and } from "drizzle-orm"
 import { auth } from "@/auth"
 import { validateTenantAccess } from "@/lib/auth-utils"
+import { brokerSchema } from "@/lib/schemas"
+import { logSecurityEvent } from "@/lib/logger"
 
 // GET - List all brokers for a tenant with goals for a specific year
 export async function GET(request: NextRequest) {
@@ -21,10 +23,16 @@ export async function GET(request: NextRequest) {
         }
 
         if (!validateTenantAccess(session, tenantId)) {
+            await logSecurityEvent({
+                event: 'ACCESS_DENIED',
+                tenantId,
+                userId: session.user.id,
+                path: '/api/brokers',
+                details: `User ${session.user.id} attempted to access tenant ${tenantId}`
+            })
             return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 
-        // Fetch brokers
         const brokersList = await db
             .select({
                 id: brokers.id,
@@ -33,28 +41,18 @@ export async function GET(request: NextRequest) {
                 phone: brokers.phone,
                 type: brokers.type,
                 avatarUrl: brokers.avatarUrl,
-                active: brokers.active
+                active: brokers.active,
+                metaAnual: brokerGoals.metaAnual
             })
             .from(brokers)
+            .leftJoin(brokerGoals, and(
+                eq(brokerGoals.brokerId, brokers.id),
+                eq(brokerGoals.year, year)
+            ))
             .where(eq(brokers.tenantId, tenantId))
             .orderBy(brokers.name)
 
-        // Fetch goals for the year
-        const goals = await db
-            .select()
-            .from(brokerGoals)
-            .where(eq(brokerGoals.year, year))
-
-        // Merge brokers with their goals
-        const result = brokersList.map(b => {
-            const goal = goals.find(g => g.brokerId === b.id)
-            return {
-                ...b,
-                metaAnual: goal?.metaAnual || '0'
-            }
-        })
-
-        return NextResponse.json(result)
+        return NextResponse.json(brokersList)
     } catch (error) {
         console.error("Erro ao listar colaboradores:", error)
         return NextResponse.json({ error: "Erro interno do servidor" }, { status: 500 })
@@ -69,13 +67,23 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
         }
 
-        const { tenantId, name, type, metaAnual, avatarUrl, year } = await request.json()
+        const body = await request.json()
+        const validation = brokerSchema.safeParse(body)
 
-        if (!tenantId || !name) {
-            return NextResponse.json({ error: "Tenant ID e nome são obrigatórios" }, { status: 400 })
+        if (!validation.success) {
+            return NextResponse.json({ error: validation.error.issues[0].message }, { status: 400 })
         }
 
+        const { tenantId, name, type, metaAnual, avatarUrl, year } = validation.data
+
         if (!validateTenantAccess(session, tenantId)) {
+            await logSecurityEvent({
+                event: 'ACCESS_DENIED',
+                tenantId,
+                userId: session.user.id,
+                path: '/api/brokers',
+                details: `User ${session.user.id} attempted to create broker for tenant ${tenantId}`
+            })
             return NextResponse.json({ error: "Acesso negado a este inquilino" }, { status: 403 })
         }
 

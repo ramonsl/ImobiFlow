@@ -9,7 +9,8 @@ import {
     CreditCard,
     Settings,
     LogOut,
-    Package
+    Package,
+    Shield
 } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
@@ -18,6 +19,7 @@ const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
     { icon: Package, label: "Planos", href: "/admin/plans" },
     { icon: Building2, label: "Imobiliárias", href: "/admin/tenants" },
+    { icon: Shield, label: "Logs de Segurança", href: "/admin/logs" }, // Added Security Logs link
     { icon: Settings, label: "Pagamentos", href: "/admin/settings" },
 ]
 
