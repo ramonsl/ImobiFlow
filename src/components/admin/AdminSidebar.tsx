@@ -17,10 +17,11 @@ import { Button } from "@/components/ui/button"
 
 const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
+    { icon: CreditCard, label: "Assinaturas", href: "/admin/subscriptions" },
     { icon: Package, label: "Planos", href: "/admin/plans" },
     { icon: Building2, label: "Imobiliárias", href: "/admin/tenants" },
-    { icon: Shield, label: "Logs de Segurança", href: "/admin/logs" }, // Added Security Logs link
-    { icon: Settings, label: "Pagamentos", href: "/admin/settings" },
+    { icon: Shield, label: "Logs de Segurança", href: "/admin/logs" },
+    { icon: Settings, label: "Configurações", href: "/admin/settings" },
 ]
 
 export function AdminSidebar() {
