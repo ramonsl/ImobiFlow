@@ -9,7 +9,8 @@ export const tenants = pgTable('tenants', {
     cnpj: text('cnpj'),
     logoUrl: text('logo_url'),
     stripeCustomerId: text('stripe_customer_id'),
-    subscriptionStatus: text('subscription_status').default('active'),
+    subscriptionStatus: text('subscription_status').default('trialing'),
+    trialEndsAt: timestamp('trial_ends_at'),
     jetimoveisToken: text('jetimoveis_token'),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()),
@@ -225,6 +226,41 @@ export const payments = pgTable('payments', {
     paidAt: timestamp('paid_at'),
     receiptUrl: text('receipt_url'), // comprovante de pagamento anexado
     notes: text('notes'),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()),
+});
+// --- Billing Tables ---
+export const subscriptionPlans = pgTable('subscription_plans', {
+    id: serial('id').primaryKey(),
+    name: text('name').notNull(),
+    slug: text('slug').notNull().unique(),
+    stripePriceId: text('stripe_price_id').unique(),
+    amount: integer('amount').notNull(),
+    currency: text('currency').default('brl'),
+    interval: text('interval').notNull(),
+    trialDays: integer('trial_days').default(0),
+    maxUsers: integer('max_users'),
+    maxProperties: integer('max_properties'),
+    maxDealsPerMonth: integer('max_deals_per_month'),
+    features: text('features').array(),
+    isActive: boolean('is_active').default(true),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()),
+});
+
+export const subscriptions = pgTable('subscriptions', {
+    id: serial('id').primaryKey(),
+    tenantId: integer('tenant_id').references(() => tenants.id).notNull().unique(),
+    stripeSubscriptionId: text('stripe_subscription_id').unique(),
+    stripeCustomerId: text('stripe_customer_id'),
+    planId: integer('plan_id').references(() => subscriptionPlans.id),
+    status: text('status').notNull(),
+    currentPeriodStart: timestamp('current_period_start'),
+    currentPeriodEnd: timestamp('current_period_end'),
+    trialStart: timestamp('trial_start'),
+    trialEnd: timestamp('trial_end'),
+    canceledAt: timestamp('canceled_at'),
+    cancelAtPeriodEnd: boolean('cancel_at_period_end').default(false),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()),
 });

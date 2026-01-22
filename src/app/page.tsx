@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Building2, TrendingUp, Users, Trophy, BarChart3, Zap, Star, Quote, Tv } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { OnboardingForm } from "@/components/marketing/OnboardingForm"
 
 export default async function LandingPage() {
   // Check if user is already logged in
@@ -116,101 +118,114 @@ export default async function LandingPage() {
             </div>
           </div>
 
-          {/* Right Side - Login Card */}
+          {/* Right Side - Auth Section */}
           <div className="flex justify-center lg:justify-end">
-            <Card className="w-full max-w-md border-border bg-card shadow-2xl">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
-                  Acesse sua conta
-                </CardTitle>
-                <CardDescription className="text-muted-foreground">
-                  Entre com seu e-mail e senha para acessar o sistema.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form
-                  action={async (formData) => {
-                    "use server"
-                    const email = formData.get("email") as string
-                    const password = formData.get("password") as string
+            <Tabs defaultValue="login" className="w-full max-w-md">
+              <TabsList className="grid w-full grid-cols-2 mb-4">
+                <TabsTrigger value="login">Entrar</TabsTrigger>
+                <TabsTrigger value="register">Começar Agora</TabsTrigger>
+              </TabsList>
 
-                    // Authenticate first
-                    const result = await signIn("credentials", {
-                      email,
-                      password,
-                      redirect: false
-                    })
+              <TabsContent value="login">
+                <Card className="border-border bg-card shadow-2xl">
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
+                      Acesse sua conta
+                    </CardTitle>
+                    <CardDescription className="text-muted-foreground">
+                      Entre com seu e-mail e senha para acessar o sistema.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form
+                      action={async (formData) => {
+                        "use server"
+                        const email = formData.get("email") as string
+                        const password = formData.get("password") as string
 
-                    if (result?.error) {
-                      throw new Error("Invalid credentials")
-                    }
+                        // Authenticate first
+                        const result = await signIn("credentials", {
+                          email,
+                          password,
+                          redirect: false
+                        })
 
-                    // Get session to determine redirect
-                    const session = await auth()
+                        if (result?.error) {
+                          throw new Error("Invalid credentials")
+                        }
 
-                    // Redirect based on user type
-                    if (!session?.user?.tenantSlug) {
-                      // Super Admin - redirect to SaaS admin panel
-                      await signIn("credentials", {
-                        email,
-                        password,
-                        redirectTo: "/admin"
-                      })
-                    } else {
-                      // Tenant user - redirect to their dashboard
-                      await signIn("credentials", {
-                        email,
-                        password,
-                        redirectTo: `/${session.user.tenantSlug}/dashboard`
-                      })
-                    }
-                  }}
-                  className="grid gap-4"
-                >
-                  <div className="grid gap-2">
-                    <Label htmlFor="email" className="text-foreground">
-                      Email Corporativo
-                    </Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="seu.nome@imobiliaria.com"
-                      required
-                      className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-primary h-12"
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="password" className="text-foreground">
-                      Senha
-                    </Label>
-                    <Input
-                      id="password"
-                      name="password"
-                      type="password"
-                      required
-                      className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-primary h-12"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium h-12 text-base shadow-lg shadow-primary/20"
-                  >
-                    <Zap className="mr-2 h-5 w-5" />
-                    Entrar no Sistema
-                  </Button>
-                </form>
+                        // Get session to determine redirect
+                        const session = await auth()
 
-                <div className="mt-6 text-center">
-                  <p className="text-xs text-zinc-500">
-                    Ao continuar, você concorda com nossos{" "}
-                    <a href="#" className="text-primary hover:underline">
-                      Termos de Serviço
-                    </a>
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+                        // Redirect based on user type
+                        if (!session?.user?.tenantId) {
+                          // Super Admin - redirect to SaaS admin panel
+                          await signIn("credentials", {
+                            email,
+                            password,
+                            redirectTo: "/admin"
+                          })
+                        } else {
+                          // Tenant user - redirect to their dashboard
+                          await signIn("credentials", {
+                            email,
+                            password,
+                            redirectTo: `/${session.user.tenantSlug}/dashboard`
+                          })
+                        }
+                      }}
+                      className="grid gap-4"
+                    >
+                      <div className="grid gap-2">
+                        <Label htmlFor="email" className="text-foreground">
+                          Email Corporativo
+                        </Label>
+                        <Input
+                          id="email"
+                          name="email"
+                          type="email"
+                          placeholder="seu.nome@imobiliaria.com"
+                          required
+                          className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-primary h-12"
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label htmlFor="password" className="text-foreground">
+                          Senha
+                        </Label>
+                        <Input
+                          id="password"
+                          name="password"
+                          type="password"
+                          required
+                          className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-primary h-12"
+                        />
+                      </div>
+                      <Button
+                        type="submit"
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium h-12 text-base shadow-lg shadow-primary/20"
+                      >
+                        <Zap className="mr-2 h-5 w-5" />
+                        Entrar no Sistema
+                      </Button>
+                    </form>
+
+                    <div className="mt-6 text-center">
+                      <p className="text-xs text-zinc-500">
+                        Ao continuar, você concorda com nossos{" "}
+                        <a href="#" className="text-primary hover:underline">
+                          Termos de Serviço
+                        </a>
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="register">
+                <OnboardingForm />
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
 
