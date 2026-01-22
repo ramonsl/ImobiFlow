@@ -7,6 +7,10 @@ import { Label } from "@/components/ui/label"
 import { Building2, TrendingUp, Users, Trophy, BarChart3, Zap, Star, Quote, Tv } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { OnboardingForm } from "@/components/marketing/OnboardingForm"
+import { PricingSection } from "@/components/marketing/PricingSection"
+import { db } from "@/lib/db"
+import { subscriptionPlans } from "@/db/schema"
+import { eq, asc } from "drizzle-orm"
 
 export default async function LandingPage() {
   // Check if user is already logged in
@@ -23,6 +27,12 @@ export default async function LandingPage() {
       redirect(`/${session.user.tenantSlug}/dashboard`)
     }
   }
+
+  // Fetch plans from DB
+  const plans = await db.query.subscriptionPlans.findMany({
+    where: eq(subscriptionPlans.isActive, true),
+    orderBy: [asc(subscriptionPlans.amount)]
+  })
 
   return (
     <div className="min-h-screen bg-background">
@@ -223,7 +233,7 @@ export default async function LandingPage() {
               </TabsContent>
 
               <TabsContent value="register">
-                <OnboardingForm />
+                <OnboardingForm plans={plans} />
               </TabsContent>
             </Tabs>
           </div>
@@ -259,6 +269,9 @@ export default async function LandingPage() {
             </p>
           </div>
         </div>
+
+        {/* Pricing Section */}
+        <PricingSection plans={plans} />
 
         {/* Testimonials Section */}
         <div className="mt-32">
@@ -312,7 +325,7 @@ export default async function LandingPage() {
         </div>
 
         {/* Stats Section */}
-        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 mb-24">
           <div className="text-center">
             <div className="text-4xl font-bold text-foreground mb-2">100+</div>
             <div className="text-zinc-500">Imobiliárias</div>
