@@ -11,6 +11,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     session: { strategy: "jwt" },
     secret: process.env.AUTH_SECRET,
     trustHost: true,
+    cookies: {
+        sessionToken: {
+            name: `imobiflow.session-token`,
+            options: {
+                httpOnly: true,
+                sameSite: "lax",
+                path: "/",
+                secure: process.env.NODE_ENV === "production",
+            },
+        },
+    },
     providers: [
         Credentials({
             name: "Credentials",
@@ -97,23 +108,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         async redirect({ url, baseUrl }) {
             console.log("🔀 Redirect callback:", { url, baseUrl })
 
-            // Simply allow the redirect - role-based logic is handled in signIn callback
-            // and landing page auto-redirect
+            // force all redirects to be relative or to the same baseUrl
+            if (url.startsWith("/")) return `${baseUrl}${url}`
+            if (url.startsWith(baseUrl)) return url
 
-            // If it's an absolute URL starting with baseUrl, allow it
-            if (url.startsWith(baseUrl)) {
-                console.log("✅ Using provided URL:", url)
-                return url
-            }
-
-            // Relative URLs
-            if (url.startsWith("/")) {
-                const fullUrl = `${baseUrl}${url}`
-                console.log("✅ Converting relative URL:", fullUrl)
-                return fullUrl
-            }
-
-            console.log("✅ Fallback to baseUrl:", baseUrl)
             return baseUrl
         },
         async signIn({ user }) {

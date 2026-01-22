@@ -11,7 +11,7 @@ import { onboardTenant } from '@/actions/onboarding'
 import { toast } from 'sonner'
 import { Zap, Loader2 } from 'lucide-react'
 
-export function OnboardingForm() {
+export function OnboardingForm({ plans }: { plans?: any[] }) {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ export function OnboardingForm() {
         adminName: '',
         adminEmail: '',
         password: '',
-        planSlug: 'starter'
+        planSlug: plans?.[0]?.slug || 'starter'
     })
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -106,9 +106,18 @@ export function OnboardingForm() {
                                 <SelectValue placeholder="Selecione um plano" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="starter">Plano Starter (Teste Grátis)</SelectItem>
-                                <SelectItem value="professional">Plano Profissional</SelectItem>
-                                <SelectItem value="enterprise">Plano Enterprise</SelectItem>
+                                {plans?.map(plan => (
+                                    <SelectItem key={plan.id} value={plan.slug}>
+                                        Plano {plan.name} {plan.amount === 0 ? '(Teste Grátis)' : `- R$ ${(plan.amount / 100).toFixed(2)}`}
+                                    </SelectItem>
+                                ))}
+                                {!plans && (
+                                    <>
+                                        <SelectItem value="starter">Plano Starter (Teste Grátis)</SelectItem>
+                                        <SelectItem value="professional">Plano Profissional</SelectItem>
+                                        <SelectItem value="enterprise">Plano Enterprise</SelectItem>
+                                    </>
+                                )}
                             </SelectContent>
                         </Select>
                     </div>
